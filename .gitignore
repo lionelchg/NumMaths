@@ -1,0 +1,11 @@
+# Repositories
+figures/
+.vscode/
+
+# python
+__pycache__
+*.egg-info/
+
+# executables and object files
+*.o
+*.x
