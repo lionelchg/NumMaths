@@ -70,3 +70,36 @@ $$
 ||e|| \leq \frac{||r|| \: ||C||}{1 - ||R||}
 $$
 
+## The Gaussian Elmination Method and LU factorisation
+
+### GEM
+
+We apply operations to the system $n$ times to get an upper triangular matrix from $A$. The procedure is as follows:
+
+1. $A^{(0)} = A$ and $b^{(0)} = b$
+2. From $k$ to $k+1$:
+We compute the coefficient that will remove 
+$$
+m_{ik} = \frac{a_{ik}^{(k)}}{a_{kk}^{(k)}} \quad i \in \intint{k+1}{n}
+$$
+Then the system is updated
+$$
+\begin{align}
+a_{ij}^{(k+1)} &= a_{ij}^{(k)} - m_{ik}a_{kj}^{(k)} \\
+b_i^{(k+1)} &= b_i^{(k)} - m_{ik}b_{k}^{(k)} \\
+\end{align}
+$$
+
+### LU factorization
+
+The GEM is equivalent to decomposing the matrix $A$ into lower and upper triangular parts such that $A = LU$. The upper triangular matrix is the one that is obtained at the end of the GEM procedure. The lower triangular matrix is the product of all matrix operations performed during the $n$ steps of GEM so that:
+
+$$
+A = \left(I + \sum_{i=1}^{n-1}m_ie_i^T\right)U
+$$
+
+where 
+
+$$
+m_i = \begin{bmatrix} 0 \\ \vdots \\ m_{i+1, i} \\ \vdots \\ m_{n, i} \end{bmatrix}
+$$
