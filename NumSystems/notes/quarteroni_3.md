@@ -69,3 +69,4 @@ Let us denote by $y$ an approximate solution. The error $e = y - x$ can be relat
 $$
 ||e|| \leq \frac{||r|| \: ||C||}{1 - ||R||}
 $$
+
