@@ -1,5 +1,63 @@
 # Chapter 1: Foundations of Matrix Analysis
 
+## General definitions
+
+The maximum module of the eigenvalues of a matrix $A$ is called the spectral radius $\rho(A)$:
+
+$$
+\rho(A) = \max_{\lambda \in \mrm{Sp}(A)} |\lambda|
+$$
+
+## Similarity transformations
+
+### Schur decomposition
+
+Given $A \in \mc{M}_n(\mathbb{C})$ there exists $U$ unitary such that
+
+$$
+U^{-1} A U = U^H A U =
+\begin{bmatrix}
+\lambda_1 & \cdots & & b_{1n} \\
+0 & \lambda_2 & & b_{2n} \\
+\vdots & & \ddots & \vdots \\
+0 & \cdots & 0 & \lambda_n
+\end{bmatrix}
+$$
+
+where $\lambda_i$ are the eigenvalues of the matrix.
+
+### Canonical Jordan form
+
+Let $A$ be any square matrix. There exists a nonsingular matrix $X$ that transforms $A$ into a block diagonal matrix $J$
+
+$$
+X^{-1} A X = J = \mrm{diag}(J_{k_1}(\lambda_1), \ldots, J_{k_l}(\lambda_l))
+$$
+
+which is called canonical Jordan form where $\lambda_j$ are the eigenvalues of $A$ and $J_k(\lambda) \in \mc{M}_k(\mathbb{C})$ with $J_k(\lambda) = 1$ if $k = 1$ and 
+
+$$
+J_k(\lambda) = 
+\begin{bmatrix}
+\lambda & 1 & 0 & \ldots & 0 \\
+0 & \lambda & 1 & \ldots & 0 \\
+0 & 0 & \lambda &  & 0 \\
+\vdots & \vdots & & \ddots & 1 \\
+0 & 0 &  & \ldots & \lambda \\
+\end{bmatrix}
+$$
+
+otherwise.
+
+### Singular Value Decomposition
+
+Let $A \in \mc{M}_{mn}(\CC)$. There exists two unitary matrices $U \in \mc{M}_m(\CC)$ and $V \in \mc{M}_m(\CC)$ such that
+
+$$
+U^H A V = \Sigma = \mrm{diag}(\sigma_1, \ldots, \sigma_p) \in \mc{M}_{mn}(\CC)
+$$
+$\Sigma$ is called the Singular Value decomposition of $A$ and $\sigma_1 > \sigma_2 > \ldots > \sigma_p$ are called the singular values of $A$.
+
 ## Matrix Norms
 
 ### Definitions
