@@ -1,5 +1,5 @@
 import numpy as np
-from utils import show_matrix, info_matrix
+from utils import show_matrix, info_matrix, show_eigen
 
 def poisson_dirichlet_1D(n: int):
     """ Create the array of poisson dirichlet 1D problem """
@@ -26,6 +26,7 @@ def poisson_dirichlet_1D_sym(n: int):
 if __name__ == '__main__':
     print('Matrices for n = 11')
     show_matrix(poisson_dirichlet_1D(11))
+    show_eigen(poisson_dirichlet_1D(11))
     show_matrix(poisson_dirichlet_1D_sym(9))
     for n in [11, 21, 51, 101]:
         print('-------------')
@@ -36,3 +37,5 @@ if __name__ == '__main__':
         info_matrix(mat)
         print('Symmetric matrix')
         info_matrix(mat_sym)
+
+    
