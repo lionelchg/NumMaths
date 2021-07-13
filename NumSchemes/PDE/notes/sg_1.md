@@ -61,8 +61,6 @@ F_{i+1/2} - V_{i+1/2} u_i &= \frac{V_{i+1/2}}{1 - e^\alpha}(u_{i+1} - u_i)
 \end{aligned}
 $$
 
-Simplifying the first parenthesis of the right hand side
-
 ### $\alpha \ll 1$
 
 The flux reduces to centered difference for the diffusive flux and convective flux

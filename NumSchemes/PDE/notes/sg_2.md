@@ -43,6 +43,15 @@ S_\mrm{CD}(\vb{F}_C) &= \vb{V}_{ij} \frac{u_i + u_j}{2} \cdot \vb{S}_{ij}
 \end{aligned}
 $$
 
+Applying the SG scheme in a multi-dimensional setting
+
+$$
+\begin{aligned}
+\vb{F} &= \vb{V} u - D \nabla u \\
+\vb{F}_{ij} \cdot \hat{\vb{ij}} &= \vb{V}_{ij} \cdot \hat{\vb{ij}} u - D \nabla u \cdot \hat{\vb{ij}}\\
+\end{aligned}
+$$
+
 The SG scheme only gives tangentiel flux projection:
 
 $$
@@ -80,3 +89,11 @@ So that total flux can be written
 $$
 \int_f \vb{F} \cdot \vb{n} \mrm{d}S = \vb{F}_{ij} \cdot \vb{S}_{ij}^\parallel + \vb{F}_{ij} \cdot \vb{S}_{ij}^\perp
 $$
+
+On meshes where the perpendicular component is non-zero another scheme must be applied on top of the SG scheme. A solution seems to simply define the centered scheme for it:
+
+$$
+\vb{F}_{ij} \cdot \vb{S}_{ij}^\perp = \vb{V}_{ij} \frac{u_i + u_j}{2} \cdot \vb{S}_{ij}^\perp - D_{ij} \frac{\nabla u_i + \nabla u_j}{2} \cdot \vb{S}_{ij}^\perp
+$$
+
+The instabilities are mostly arising in zones where $\alpha \ll 1$ where the diffusion dominates and in that case the scheme reduces to it. Now is there an issue to have an upwind in one direction and central difference in another?
