@@ -115,3 +115,27 @@ $$
 $$
 
 ### Flux splitting
+
+Total flux can be splitted following:
+
+$$
+\int_f \vb{F} \cdot \vb{n} \mrm{d}S = \vb{F}_{ij} \cdot \vb{S}_{ij}
+$$
+
+Defining the tangential vector
+
+$$
+\hat{\vb{ij}} = \frac{\vb{ij}}{ij}
+$$
+
+The surface normal is splitted:
+
+$$
+\vb{S}_{ij} = \vb{S}_{ij}^\parallel + \vb{S}_{ij}^\perp
+$$
+
+So that total flux can be written
+
+$$
+\int_f \vb{F} \cdot \vb{n} \mrm{d}S = \vb{F}_{ij} \cdot \vb{S}_{ij}^\parallel + \vb{F}_{ij} \cdot \vb{S}_{ij}^\perp
+$$
