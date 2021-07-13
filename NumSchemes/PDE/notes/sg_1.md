@@ -52,6 +52,17 @@ $$
 F_{i+1/2} = V_{i+1/2}u_i
 $$
 
+Let us search for another term in the asymptotic expansion retrieving the dominant term
+
+$$
+\begin{aligned}
+F_{i+1/2} - V_{i+1/2} u_i &= V_{i+1/2}\left(\frac{u_{i+1}}{1 - e^\alpha} - \frac{e^\alpha}{1 - e^\alpha}u_i - u_i\right) \\
+F_{i+1/2} - V_{i+1/2} u_i &= \frac{V_{i+1/2}}{1 - e^\alpha}(u_{i+1} - u_i) 
+\end{aligned}
+$$
+
+Simplifying the first parenthesis of the right hand side
+
 ### $\alpha \ll 1$
 
 The flux reduces to centered difference for the diffusive flux and convective flux
