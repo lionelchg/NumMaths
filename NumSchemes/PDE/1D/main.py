@@ -5,45 +5,43 @@ from numba import njit
 
 from plot import plot_sim, plot_G, plot_cvg
 from test_funcs import gaussian, step, packet_wave
-from utils import create_dir
 from fd_schemes import its_fd
 from errors import L1error, L2error, Linferror
 from pathlib import Path
 
-def main(args):
-    # figures directory
-    fig_dir = Path(f'figures/{args.figdir}/')
-    cvg_dir = fig_dir / 'cvg'
-    sim_dir = fig_dir / 'sim'
-    sp_dir = fig_dir / 'sp'
+def run_sims(a: float, cfls: list, xmin: float, xmax: float, nnx: int, 
+    n_periods: float, schemes: list, sim_dir: Path):
+    """Run simulations for given cfls in 1D domain (xmin, xmax, nnx) for
+    n_periods and for each scheme in schemes with figures saved in sim_dir
 
-    # Create the directories
-    cvg_dir.mkdir(parents=True, exist_ok=True)
-    sim_dir.mkdir(parents=True, exist_ok=True)
-    sp_dir.mkdir(parents=True, exist_ok=True)
-    
-    # Schemes selected
-    schemes = args.schemes
-    print(f"Schemes selected: {' '.join(schemes)}")
-
-    # Number of periods
-    n_periods = 2.0
-
+    :param a: Convection speed
+    :type a: float
+    :param cfls: Cfls studied
+    :type cfls: list
+    :param xmin: Left boundary
+    :type xmin: float
+    :param xmax: Right boundary
+    :type xmax: float
+    :param nnx: Number of nodes
+    :type nnx: int
+    :param n_periods: Number of periods
+    :type n_periods: float
+    :param schemes: Schemes
+    :type schemes: list
+    :param sim_dir: Figures directory
+    :type sim_dir: Path
+    """
     # Mesh properties
-    xmin, xmax, nnx = -1, 1, 401
     Lx, ncx = xmax - xmin, nnx - 1
     x_th = np.linspace(xmin, xmax, 1001)
     dx = (xmax - xmin) / ncx
+    x = np.linspace(xmin, xmax, nnx)
 
     # Center of the domain
     x0 = (xmax + xmin) / 2
 
     # Number of schemes to test
     n_schemes = len(schemes)
-
-    # CFL and simulation properties
-    a = 1.0
-    cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
 
     print('\n-------------------------------------------------------')
     print(f'Launching simulations at nnx = {nnx:d} and a = {a:.2f}')
@@ -54,7 +52,6 @@ def main(args):
         dt = dx * cfl / a
         
         # initialization (number of timesteps required to do a full round)
-        x = np.linspace(xmin, xmax, nnx)
         u_gauss = np.tile(gaussian(x, x0, 0.3), n_schemes).reshape(n_schemes,  nnx)
         u_step = np.tile(step(x, x0), n_schemes).reshape(n_schemes,  nnx)
         u_2pw = np.tile(packet_wave(x, x0, 0.5), n_schemes).reshape(n_schemes,  nnx)
@@ -76,19 +73,37 @@ def main(args):
                 schemes, f'CFL = {cfl:.2f} - dx = {dx:.2e} m - dt = {dt:.2e} s - nits = {nt:d}', 
                 sim_dir / f'sim_cfl_{index}')
 
-    # Plot the diffusion and disperson errors 
-    # from the amplification factors of the schemes
-    print(f'\n--> Plotting amplifications factors...')
-    for scheme in schemes:
-        plot_G(scheme, cfls, sp_dir)
+def run_cvg(a: float, cfls: list, xmin: float, xmax: float, nnxs: np.ndarray, 
+    n_periods_cvg: float, schemes: list, functions: list, cvg_dir: Path):
+    """ Run convergence for given resolutions and specified schemes in 1D domain
+    (xmin, xmax) with profiles specified in functions
 
+    :param a: Convection speed
+    :type a: float
+    :param cfls: CFLs studied
+    :type cfls: list
+    :param xmin: Left boundary
+    :type xmin: float
+    :param xmax: Right boundary
+    :type xmax: float
+    :param nnxs: Resolutions studied
+    :type nnxs: np.ndarray
+    :param n_periods_cvg: Number of periods
+    :type n_periods_cvg: float
+    :param schemes: Schemes studied
+    :type schemes: list
+    :param functions: 1D profiles
+    :type functions: list
+    :param cvg_dir: Directory for figures
+    :type cvg_dir: Path
+    """
     print('\n-------------------------------------------------------')
     print(f'Studying mesh convergence')
     print('-------------------------------------------------------')
     
-    # Mesh convergence of the schemes
-    functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
-    nnxs = np.array([51, 101, 201, 501])
+    Lx = xmax - xmin
+    x0 = (xmin + xmax) / 2
+    n_schemes = len(schemes)
     errors = np.zeros((len(nnxs), n_schemes, len(functions)))
     n_periods_cvg = 2.0
     for index, cfl in enumerate(cfls):
@@ -115,6 +130,43 @@ def main(args):
                     errors[i_mesh, i_scheme, i_func] = L1error(u_th, u_sim[i_scheme, :], ncx)
         # One plot per cfl
         plot_cvg(nnxs, schemes, functions, errors, f'CFL = {cfl:.2f}', cvg_dir / f'cfl_{index}')
+
+def main(args):
+    # figures directory
+    fig_dir = Path(f'figures/{args.figdir}/')
+    cvg_dir = fig_dir / 'cvg'
+    sim_dir = fig_dir / 'sim'
+    sp_dir = fig_dir / 'sp'
+
+    # Create the directories
+    cvg_dir.mkdir(parents=True, exist_ok=True)
+    sim_dir.mkdir(parents=True, exist_ok=True)
+    sp_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Schemes selected
+    schemes = args.schemes
+    print(f"Schemes selected: {' '.join(schemes)}")
+
+    # Mesh properties
+    xmin, xmax = -1, 1
+
+    # Convection speed
+    a = 1.0
+
+    # Launch simulations
+    cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
+    run_sims(a, cfls, xmin, xmax, 401, 2.0, schemes, sim_dir)
+
+    # Plot the diffusion and disperson errors 
+    # from the amplification factors of the schemes
+    print(f'\n--> Plotting amplifications factors...')
+    for scheme in schemes:
+        plot_G(scheme, cfls, sp_dir)
+    
+    # Mesh convergence of the schemes
+    functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
+    nnxs = np.array([51, 101, 201, 501])
+    run_cvg(a, cfls, xmin, xmax, nnxs, 2.0, schemes, functions, cvg_dir)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
