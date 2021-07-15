@@ -44,20 +44,22 @@ def plot_G(scheme, cfls, fig_dir):
     """ Plot the diffusion and dispersion errors from the amplification factor """
     phi = np.linspace(0, np.pi, 300)
     phi_deg = phi * 180 / np.pi    
-    fig, axes = plt.subplots(ncols=2, figsize=(8, 5))
+    fig, axes = plt.subplots(ncols=3, figsize=(10, 4))
     for cfl in cfls:
-        # df_err, dp_err = sp_analysis.errors(getattr(sp_analysis, f'G_{scheme}'), phi, cfl)
         df_err, dp_err = sp_analysis.errors(ampl_factor(phi, cfl, scheme), phi, cfl)
         axes[0].plot(phi_deg, df_err, label=f'CFL = {cfl:.2f}')
         axes[1].plot(phi_deg, dp_err, label=f'CFL = {cfl:.2f}')
+        axes[2].plot(phi_deg, dp_err * phi_deg, label=f'CFL = {cfl:.2f}')
     ax_prop_G(axes[0], r'$\varepsilon_D$')
     ax_prop_G(axes[1], r'$\varepsilon_\phi$')
+    ax_prop_G(axes[2], r'$\phi_\mathrm{num}$')
+    axes[2].legend()
+    fig.tight_layout(rect=[0, 0.04, 1, 0.96])
     fig.suptitle(f'{scheme} Spectral Analysis')
     fig.savefig(fig_dir / f'errors_{scheme}', bbox_inches='tight')
 
 def ax_prop_G(ax, ylabel, ylim=None):
     """ Ax properties of plot_G """
-    ax.legend()
     ax.grid(True)
     ax.set_xlabel(r'$\phi$')
     ax.set_ylabel(ylabel)

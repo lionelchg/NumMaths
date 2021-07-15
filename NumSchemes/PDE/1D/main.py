@@ -100,7 +100,7 @@ def run_cvg(a: float, cfls: list, xmin: float, xmax: float, nnxs: np.ndarray,
     print('\n-------------------------------------------------------')
     print(f'Studying mesh convergence')
     print('-------------------------------------------------------')
-    
+
     Lx = xmax - xmin
     x0 = (xmin + xmax) / 2
     n_schemes = len(schemes)
