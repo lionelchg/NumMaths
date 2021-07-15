@@ -5,6 +5,20 @@ from matplotlib.patches import Circle
 import cmath
 from plot import plot_ax_scalar
 
+def G_FOU(cfl, cos_alpha, sin_alpha, phi_X, phi_Y):
+    """ 2D FOU amplification factor """
+    return (1 - cfl * (cos_alpha * (1 - np.exp(-1j * phi_X)) + 
+        sin_alpha * (1 - np.exp(-1j * phi_Y))))
+
+def G_CD(cfl, cos_alpha, sin_alpha, phi_X, phi_Y):
+    """ 2D Central difference amplification factor """
+    return (1 - 1j * cfl * (cos_alpha * np.sin(phi_X) + sin_alpha * np.sin(phi_Y)))
+
+def G_FOUx_CDy(cfl, cos_alpha, sin_alpha, phi_X, phi_Y):
+    """ 2D FOU in x and CD in y amplification factor """
+    return (1 - cfl * (cos_alpha * (1 - np.exp(-1j * phi_X)) + 
+        - 1j * cfl * sin_alpha * np.sin(phi_Y)))
+
 def G_LW(cfl, cos_alpha, sin_alpha, phi_X, phi_Y):
     """ 2D Lax-Wendroff amplification factor """
     return (1 - 1j * cfl * (cos_alpha * np.sin(phi_X) + sin_alpha * np.sin(phi_Y))
@@ -23,9 +37,9 @@ def plot_G_2D(scheme, cfl, figname):
 
     # Plot quantities
     plot_ax_scalar(fig, axes[0], phi_X, phi_Y, mod_G, 
-        f'CFL = {cfl:.2f}', cmap='Blues', max_value=1.2)
+        f'CFL = {cfl:.2f}', cmap='Blues')
     plot_ax_scalar(fig, axes[1], phi_X, phi_Y, disp_err, 
-        f'CFL = {cfl:.2f}', cmap='Blues', max_value=1.1)
+        f'CFL = {cfl:.2f}', cmap='Blues')
 
     # Print circles for delimitation
     axes[0].add_patch(Circle((0, 0), np.pi, fill=False, color='yellow'))
@@ -38,7 +52,7 @@ if __name__ == '__main__':
     fig_dir.mkdir(parents=True, exist_ok=True)
 
     # Schemes
-    schemes = ['LW']
+    schemes = ['FOU', 'CD', 'FOUx_CDy', 'LW']
 
     # Creation of vectors and grid for 2D plotting
     cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
@@ -55,4 +69,4 @@ if __name__ == '__main__':
         scheme_dir = fig_dir / scheme
         scheme_dir.mkdir(parents=True, exist_ok=True)
         for i_cfl, cfl in enumerate(cfls):
-            plot_G_2D('LW', cfl, scheme_dir / f'cfl_{i_cfl}')
+            plot_G_2D(scheme, cfl, scheme_dir / f'cfl_{i_cfl}')
