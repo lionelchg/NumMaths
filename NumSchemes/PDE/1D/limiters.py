@@ -37,7 +37,7 @@ def ax_prop(ax, title):
 if __name__ == '__main__':
     fig_dir = 'figures/'
     r = np.linspace(0, 3, 301)
-    sns.set_theme()
+    # sns.set_theme('notebook')
     fig, axes = plt.subplots(nrows=3, ncols=2, 
         figsize=(10, 10), sharex=True, sharey=True)
     axes = axes.reshape(-1)

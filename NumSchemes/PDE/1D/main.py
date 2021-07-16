@@ -5,9 +5,11 @@ from numba import njit
 
 from plot import plot_sim, plot_G, plot_cvg
 from test_funcs import gaussian, step, packet_wave
-from fd_schemes import its_fd
+from fd_schemes import its_fd, its_limiter_fd
 from errors import L1error, L2error, Linferror
 from pathlib import Path
+
+lim_list = ['van_leer', 'min_mod', 'superbee']
 
 def run_sims(a: float, cfls: list, xmin: float, xmax: float, nnx: int, 
     n_periods: float, schemes: list, sim_dir: Path):
@@ -63,10 +65,16 @@ def run_sims(a: float, cfls: list, xmin: float, xmax: float, nnx: int,
 
         # Iteration of the schemes
         for i_scheme, scheme in enumerate(schemes):
-            its_fd(nt, res, u_gauss[i_scheme, :], cfl, scheme)
-            its_fd(nt, res, u_step[i_scheme, :], cfl, scheme)
-            its_fd(nt, res, u_2pw[i_scheme, :], cfl, scheme)
-            its_fd(nt, res, u_4pw[i_scheme, :], cfl, scheme)
+            if scheme in lim_list:
+                its_limiter_fd(nt, res, u_gauss[i_scheme, :], cfl, scheme)
+                its_limiter_fd(nt, res, u_step[i_scheme, :], cfl, scheme)
+                its_limiter_fd(nt, res, u_2pw[i_scheme, :], cfl, scheme)
+                its_limiter_fd(nt, res, u_4pw[i_scheme, :], cfl, scheme)
+            else:
+                its_fd(nt, res, u_gauss[i_scheme, :], cfl, scheme)
+                its_fd(nt, res, u_step[i_scheme, :], cfl, scheme)
+                its_fd(nt, res, u_2pw[i_scheme, :], cfl, scheme)
+                its_fd(nt, res, u_4pw[i_scheme, :], cfl, scheme)
 
         # One plot per cfl
         plot_sim(x_th, x, x0, u_gauss, u_step, u_2pw, u_4pw, 
