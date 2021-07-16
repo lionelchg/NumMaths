@@ -134,7 +134,10 @@ def run_cvg(a: float, cfls: list, xmin: float, xmax: float, nnxs: np.ndarray,
 
                 # Iteration of the schemes
                 for i_scheme, scheme in enumerate(schemes):
-                    its_fd(nt, res, u_sim[i_scheme, :], cfl, scheme)
+                    if scheme in lim_list:
+                        its_limiter_fd(nt, res, u_sim[i_scheme, :], cfl, scheme)
+                    else:
+                        its_fd(nt, res, u_sim[i_scheme, :], cfl, scheme)
                     errors[i_mesh, i_scheme, i_func] = L1error(u_th, u_sim[i_scheme, :], ncx)
         # One plot per cfl
         plot_cvg(nnxs, schemes, functions, errors, f'CFL = {cfl:.2f}', cvg_dir / f'cfl_{index}')
@@ -169,7 +172,8 @@ def main(args):
     # from the amplification factors of the schemes
     print(f'\n--> Plotting amplifications factors...')
     for scheme in schemes:
-        plot_G(scheme, cfls, sp_dir)
+        if not scheme in lim_list:
+            plot_G(scheme, cfls, sp_dir)
     
     # Mesh convergence of the schemes
     functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
