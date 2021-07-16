@@ -41,8 +41,10 @@ def bjs(sigma, scheme):
 @njit(cache=True)
 def periodic_index(index, n):
     """ Return the generalized periodic index associated to index """
-    if index < 0 or index > n - 1:
-        per_index = (index) % n
+    if index < 0:
+        per_index = (index - 1) % n
+    elif index > n - 1:
+        per_index = (index + 1) % n
     else:
         per_index = index
     return per_index
@@ -80,10 +82,10 @@ def advance_limiter_fd(res, u, sigma, limiter):
         r_im1 = (u[i] - u[im1]) / (u[im1] - u[im2])
         res[i] = sigma * (1 + 0.5 * (1 - sigma) * 
                     (lim_function(r_i) - lim_function(r_im1) / r_im1)) \
-                        * (u[i] - u[im1])
+                    * (u[i] - u[im1])
 
 def its_limiter_fd(nt, res, u, sigma, limiter):
     """ Function to do iterations in finite difference formulation """
-    for _ in range(nt):
+    for it in range(nt):
         advance_limiter_fd(res, u, sigma, limiter)
         u -= res

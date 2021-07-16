@@ -162,6 +162,7 @@ def main(args):
     a = 1.0
 
     # Launch simulations
+    # cfls = [0.1]
     cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
     run_sims(a, cfls, xmin, xmax, 401, 2.0, schemes, sim_dir)
 
