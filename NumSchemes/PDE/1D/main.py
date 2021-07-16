@@ -162,20 +162,21 @@ def main(args):
     a = 1.0
 
     # Launch simulations
-    # cfls = [0.1]
-    cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
-    run_sims(a, cfls, xmin, xmax, 401, 2.0, schemes, sim_dir)
+    cfls = [0.1, 0.3]
+    run_sims(a, cfls, xmin, xmax, 201, 1.0, schemes, sim_dir)
+    # cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
+    # run_sims(a, cfls, xmin, xmax, 401, 2.0, schemes, sim_dir)
 
-    # Plot the diffusion and disperson errors 
-    # from the amplification factors of the schemes
-    print(f'\n--> Plotting amplifications factors...')
-    for scheme in schemes:
-        plot_G(scheme, cfls, sp_dir)
+    # # Plot the diffusion and disperson errors 
+    # # from the amplification factors of the schemes
+    # print(f'\n--> Plotting amplifications factors...')
+    # for scheme in schemes:
+    #     plot_G(scheme, cfls, sp_dir)
     
-    # Mesh convergence of the schemes
-    functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
-    nnxs = np.array([51, 101, 201, 501])
-    run_cvg(a, cfls, xmin, xmax, nnxs, 2.0, schemes, functions, cvg_dir)
+    # # Mesh convergence of the schemes
+    # functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
+    # nnxs = np.array([51, 101, 201, 501])
+    # run_cvg(a, cfls, xmin, xmax, nnxs, 2.0, schemes, functions, cvg_dir)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

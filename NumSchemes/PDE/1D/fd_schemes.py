@@ -68,22 +68,46 @@ def its_fd(nt, res, u, sigma, scheme):
         advance_fd(res, u, coeffs, ju, jd)
         u -= res
 
+@njit(cache=True)
+def grad_ratio(u, i, i1, im1):
+    """ Ratio of gradients at location i """
+    if u[i1] == u[i]:
+        r_i = 0.0
+    elif u[i] == u[im1]:
+        r_i = 10.0 * np.sign((u[i1] - u[i]))
+    else:
+        r_i = (u[i1] - u[i]) / (u[i] - u[im1])
+    return r_i
+
+@njit(cache=True)
+def lim_value(u, i, i1, im1, limiter):
+    r = grad_ratio(u, i, i1, im1)
+    if limiter == 'van_leer':
+        psi_r_i = (r + np.abs(r)) / (1 + r)
+    elif limiter == 'superbee':
+        psi_r_i = max(0, min(2 * r, 1), min(r, 2))
+    return psi_r_i
+
+@njit(cache=True)
 def advance_limiter_fd(res, u, sigma, limiter):
     """ Calculate the scheme advancement for a limited scheme based on SOU
     WB scheme with periodic boundary conditions """
-    lim_function = getattr(lmt, limiter)
+    # lim_function = getattr(lmt, limiter)
 
     for i in range(len(u)):
         res[i] += u[i]
         i1 = periodic_index(i + 1, len(u))
         im1 = periodic_index(i - 1, len(u))
         im2 = periodic_index(i - 2, len(u))
-        r_i = (u[i1] - u[i]) / (u[i] - u[im1])
-        r_im1 = (u[i] - u[im1]) / (u[im1] - u[im2])
-        res[i] = sigma * (1 + 0.5 * (1 - sigma) * 
-                    (lim_function(r_i) - lim_function(r_im1) / r_im1)) \
-                    * (u[i] - u[im1])
 
+        psi_r_i = lim_value(u, i, i1, im1, limiter)
+        psi_r_im1 = lim_value(u, im1, i, im2, limiter)
+        res[i] = sigma * (1 + 0.5 * (1 - sigma) * 
+                    psi_r_i) * (u[i] - u[im1]) \
+                    - 0.5 * sigma * (1 - sigma) * psi_r_im1 \
+                    * (u[im1] - u[im2])
+
+@njit(cache=True)
 def its_limiter_fd(nt, res, u, sigma, limiter):
     """ Function to do iterations in finite difference formulation """
     for it in range(nt):
