@@ -82,8 +82,11 @@ def grad_ratio(u, i, i1, im1):
 @njit(cache=True)
 def lim_value(u, i, i1, im1, limiter):
     r = grad_ratio(u, i, i1, im1)
+    if r <= 0: return 0.0 
     if limiter == 'van_leer':
-        psi_r_i = (r + np.abs(r)) / (1 + r)
+        psi_r_i = (r + abs(r)) / (1 + r)
+    elif limiter == 'min_mod':
+        psi_r_i = min(r, 1)
     elif limiter == 'superbee':
         psi_r_i = max(0, min(2 * r, 1), min(r, 2))
     return psi_r_i
@@ -92,7 +95,6 @@ def lim_value(u, i, i1, im1, limiter):
 def advance_limiter_fd(res, u, sigma, limiter):
     """ Calculate the scheme advancement for a limited scheme based on SOU
     WB scheme with periodic boundary conditions """
-    # lim_function = getattr(lmt, limiter)
 
     for i in range(len(u)):
         res[i] += u[i]
