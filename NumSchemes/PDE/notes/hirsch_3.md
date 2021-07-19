@@ -127,7 +127,7 @@ $$
 For the SOU scheme as base:
 
 $$
-u_i^{n+1} = u_i^n - \sigma\left[1 + \frac{1}{2}(1-\sigma)(\Psi(r_i) - \Psi(r_{i-1})/r_{i-1})\right]
+u_i^{n+1} = u_i^n - \sigma\left[1 + \frac{1}{2}(1-\sigma)\Psi(r_i)\right](u_i^n - u_{i-1}^n) + \frac{\sigma(1 - \sig)}{2}\Psi(r_{i-1})(u_{i-1}^n - u_{i-2}^n)
 $$
 
 We recover the SOU scheme for $\Psi = 1$ and the LW scheme for $\Psi = r$.
