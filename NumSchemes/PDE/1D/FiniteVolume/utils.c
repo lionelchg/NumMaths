@@ -18,7 +18,7 @@ void write_vecs(double **list_vec, int n, int m, char **vec_names, char *filenam
     FILE *fptr;
 
     // use appropriate location if you are using MacOS or Linux
-    printf("%s\n", filename);
+    printf("Print results to %s file\n", filename);
     fptr = fopen(filename, "w");
 
     if (fptr == NULL)

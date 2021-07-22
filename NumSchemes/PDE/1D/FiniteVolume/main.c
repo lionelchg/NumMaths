@@ -29,8 +29,11 @@ int main(int argc, char* argv[]) {
     double dt = dx * cfl / conv_speed;
 
     // Number of iterations
-    int n_periods = 1.0;
+    double n_periods = 1.0;
     int nt = (int)(n_periods * Lx / conv_speed / dt);
+
+    // Print information
+    printf("cfl = %.2f - nits = %d - dx = %.2e - dt = %.2e\n", cfl, nt, dx, dt);
 
     // Create 4 profiles
     double *u_gauss = gaussian(x, x0, 0.3, nnx);
