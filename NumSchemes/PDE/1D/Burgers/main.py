@@ -29,9 +29,6 @@ def plot_profiles(x:np.ndarray, profiles: dict, t_s: float, figname: Path):
         axes[0].plot(x, profile, label=f'{time:.2f}')
     ax_prop(axes[0], '$x$', '$u$')
 
-    # Boundaries of domain
-    xmin, xmax = np.min(x), np.max(x)
-
     # Creation of characteristic from initial profile
     init_profile = profiles[0.0]
     nnx = len(x)
@@ -54,14 +51,17 @@ def Linf_norm(y):
 def burgers_sol(x, fprofile, args_prof, t):
     """ Give the Burgers solution at instant t of fprofile 
     function """
-    tol = 1e-8
+    tol = 1e-6
     prof = fprofile(x, **args_prof)
     tmp_prof = np.zeros_like(prof)
     err = Linf_norm(prof)
-    while err > tol:
+    it = 0
+    maxits = 200
+    while err > tol and it < maxits:
         tmp_prof[:] = prof[:]
         prof = fprofile(x - prof * t, **args_prof)
         err = Linf_norm(prof - tmp_prof)
+        it += 1
     return prof
 
 def run_burgers(x:np.ndarray, fprofile, args_profile: dict, 
@@ -93,11 +93,11 @@ if __name__ == '__main__':
     run_burgers(x, smooth_shock, args_shock, 
             time_shock, fig_dir / 'smooth_shock')
 
-    # # Rarefaction
-    # time_shock = 1.0
-    # args_rare = {'A': 1.0, 'k': 5.0}
-    # run_burgers(x, smooth_rarefaction, args_rare,
-    #         time_shock, fig_dir / 'smooth_rarefaction')
+    # Rarefaction
+    time_shock = 0.3
+    args_rare = {'A': 0.2, 'k': 20.0}
+    run_burgers(x, smooth_rarefaction, args_rare,
+            time_shock, fig_dir / 'smooth_rarefaction')
     
     # Compression-shock
     xmin, xmax, nnx = -0.5, 1.5, 401
