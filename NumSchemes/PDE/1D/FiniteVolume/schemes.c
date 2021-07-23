@@ -2,27 +2,27 @@
 
 int* scheme_id(char* scheme) {
     int* ischeme = (int *)malloc(2 * sizeof(int));
-    if (scheme == "LW") {
+    if (strcmp(scheme, "LW") == 0) {
         ischeme[0] = 0;
         ischeme[1] = 0;
     }
-    else if (scheme == "WB") {
+    else if (strcmp(scheme, "WB") == 0) {
         ischeme[0] = 0;
         ischeme[1] = 1;
     }
-    else if (scheme == "FOU") {
+    else if (strcmp(scheme, "FOU") == 0) {
         ischeme[0] = 1;
         ischeme[1] = 0;
     }
-    else if (scheme == "Fromm") {
+    else if (strcmp(scheme, "Fromm") == 0) {
         ischeme[0] = 1;
         ischeme[1] = 1;
     }
-    else if (scheme == "Quick") {
+    else if (strcmp(scheme, "Quick") == 0) {
         ischeme[0] = 1;
         ischeme[1] = 2;
     }
-    else if (scheme == "Third") {
+    else if (strcmp(scheme, "Third") == 0) {
         ischeme[0] = 1;
         ischeme[1] = 3;
     }

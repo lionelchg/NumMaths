@@ -1,6 +1,7 @@
 #ifndef _SCHEMES_
 #define _SCHEMES_
 #include "utils.h"
+#include "string.h"
 // #include "defs.h"
 
 // Retrieve the scheme identifier in the code
