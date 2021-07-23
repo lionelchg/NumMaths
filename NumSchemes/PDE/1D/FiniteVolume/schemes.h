@@ -19,8 +19,12 @@ double fv_scheme(double *u, int nnodes, int i, int ischeme);
 // Return the generalized index for periodic boundary conditions in 1D
 int periodic_index(int index, int nnodes);
 
-// List of schemes
+// List of 1 step eplicit schemes
 double LW_flux(double *u, int nnodes, int i, double sigma);
+double WB_flux(double *u, int nnodes, int i, double sigma);
+
+// List of general schemes
 double FOU_flux(double *u, int nnodes, int i);
+double kappa_flux(double *u, int nnodes, int i, double kappa);
 
 #endif

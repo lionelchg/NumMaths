@@ -6,9 +6,10 @@
 #include "defs.h"
 #include "string.h"
 
-int main(int argc, char* argv[]) {
-    int nschemes = 2;
-    char *schemes[2] = {"LW", "FOU"};
+int main(int argc, char** argv) {
+    // All arguments of CLI are schemes
+    int nschemes = argc - 1;
+    char **schemes = argv + 1;
     char *data_dir = "data/";
     mkdir(data_dir, 0777);
 
