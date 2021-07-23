@@ -1,5 +1,18 @@
 #include "schemes.h"
 
+int* scheme_id(char* scheme) {
+    int* ischeme = (int *)malloc(2 * sizeof(int));
+    if (scheme == "LW") {
+        ischeme[0] = 0;
+        ischeme[1] = 0;
+    }
+    else if (scheme == "FOU") {
+        ischeme[0] = 1;
+        ischeme[1] = 0;
+    }
+    return ischeme;
+}
+
 void rungekutta(double *u, int nnodes, double dx, double dt, 
                 double a, int *ischeme, int nt) {
     int i, t;

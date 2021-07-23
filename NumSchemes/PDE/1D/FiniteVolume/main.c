@@ -4,11 +4,12 @@
 #include "profiles.h"
 #include "schemes.h"
 #include "defs.h"
+#include "string.h"
 
 int main(int argc, char* argv[]) {
     int nschemes = 2;
-    char *schemes[2] = {"LW", "SOU"};
-    char *data_dir = "data";
+    char *schemes[2] = {"LW", "FOU"};
+    char *data_dir = "data/";
     mkdir(data_dir, 0777);
 
     // Physical properties
@@ -35,28 +36,37 @@ int main(int argc, char* argv[]) {
     // Print information
     printf("cfl = %.2f - nits = %d - dx = %.2e - dt = %.2e\n", cfl, nt, dx, dt);
 
-    // Create 4 profiles
-    double *u_gauss = gaussian(x, x0, 0.3, nnx);
-    double *u_step = step(x, x0, 1.0, nnx);
-    double *u_2pw = packet_wave(x, x0, 0.5, 1.0, nnx);
-    double *u_4pw = packet_wave(x, x0, 0.25, 1.0, nnx);
+    // Iterate on schemes
+    int index_scheme;
+    for (index_scheme = 0; index_scheme < nschemes; index_scheme++) {
+        // printf("Running %s schemen", schemes[index_scheme]);
+        // Create 4 profiles
+        double *u_gauss = gaussian(x, x0, 0.3, nnx);
+        double *u_step = step(x, x0, 1.0, nnx);
+        double *u_2pw = packet_wave(x, x0, 0.5, 1.0, nnx);
+        double *u_4pw = packet_wave(x, x0, 0.25, 1.0, nnx);
 
-    // Iterate using scheme
-    int ischeme[2] = {1, 0}; 
-    rungekutta(u_gauss, nnx, dx, dt, conv_speed, ischeme, nt);
-    rungekutta(u_step, nnx, dx, dt, conv_speed, ischeme, nt);
-    rungekutta(u_2pw, nnx, dx, dt, conv_speed, ischeme, nt);
-    rungekutta(u_4pw, nnx, dx, dt, conv_speed, ischeme, nt);
+        // Iterate using scheme
+        int* ischeme = scheme_id(schemes[index_scheme]); 
+        rungekutta(u_gauss, nnx, dx, dt, conv_speed, ischeme, nt);
+        rungekutta(u_step, nnx, dx, dt, conv_speed, ischeme, nt);
+        rungekutta(u_2pw, nnx, dx, dt, conv_speed, ischeme, nt);
+        rungekutta(u_4pw, nnx, dx, dt, conv_speed, ischeme, nt);
 
-    // Print results
-    double *results[5];
-    results[0] = x;
-    results[1] = u_gauss;
-    results[2] = u_step;
-    results[3] = u_2pw;
-    results[4] = u_4pw;
-    char *vec_names[5] = {"position", "Gaussian", "Step", "Sin_2", "Sin_4"};
-    write_vecs(results, nnx, 5, vec_names, "data/results.dat");
-    
+        // Print results
+        double *results[5];
+        results[0] = x;
+        results[1] = u_gauss;
+        results[2] = u_step;
+        results[3] = u_2pw;
+        results[4] = u_4pw;
+        char *vec_names[5] = {"position", "Gaussian", "Step", "Sin_2", "Sin_4"};
+        
+        char data_fn[lenstr];
+        strcpy(data_fn, data_dir);
+        strcat(data_fn, schemes[index_scheme]);
+        strcat(data_fn, ".dat");
+        write_vecs(results, nnx, 5, vec_names, data_fn);
+    }
     return 0;
 }

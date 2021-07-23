@@ -1,6 +1,9 @@
 #ifndef _DEFS_
 #define _DEFS_
 
+// Length of strings
+const int lenstr = 100;
+
 // Explicit schemes (Euler time integration implied)
 const int EXPL_SCHEME = 0;
 const int LW_SCHEME = 0;

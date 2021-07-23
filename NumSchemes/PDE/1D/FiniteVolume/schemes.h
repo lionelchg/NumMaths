@@ -3,6 +3,9 @@
 #include "utils.h"
 // #include "defs.h"
 
+// Retrieve the scheme identifier in the code
+int* scheme_id(char* scheme);
+
 // Apply the temporal scheme (temporal iterations)
 void rungekutta(double *u, int nnodes, double dx, double dt,
                 double a, int *ischeme, int nt);
