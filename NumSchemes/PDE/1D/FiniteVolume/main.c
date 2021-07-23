@@ -42,7 +42,7 @@ int main(int argc, char* argv[]) {
     double *u_4pw = packet_wave(x, x0, 0.25, 1.0, nnx);
 
     // Iterate using scheme
-    int ischeme[2] = {0, 0}; 
+    int ischeme[2] = {1, 0}; 
     rungekutta(u_gauss, nnx, dx, dt, conv_speed, ischeme, nt);
     rungekutta(u_step, nnx, dx, dt, conv_speed, ischeme, nt);
     rungekutta(u_2pw, nnx, dx, dt, conv_speed, ischeme, nt);

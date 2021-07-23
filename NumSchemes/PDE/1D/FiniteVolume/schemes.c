@@ -7,7 +7,7 @@ void rungekutta(double *u, int nnodes, double dx, double dt,
     double *res = alloc_vec(nnodes);
     // Temporal loop
     for (t = 0; t < nt; t++) {
-        // Spatial loop
+        // Spatial loop to compute residual
         for (i = 0; i < nnodes; i++) {
             if (ischeme[0] == 0) {
                 res[i] = cfl * (fv_expl_scheme(u, nnodes, i, cfl, ischeme[1]) 
@@ -17,14 +17,16 @@ void rungekutta(double *u, int nnodes, double dx, double dt,
                 res[i] = cfl * (fv_scheme(u, nnodes, i, ischeme[1]) 
                         - fv_scheme(u, nnodes, i - 1, ischeme[1]));
             }
-            // printf("i = %d u = %.2e res = %.2e\n", i, u[i], res[i]);
+        }
+        // Apply the residual
+        for (i = 0; i < nnodes; i++) {
             u[i] -= res[i];
         }
     }
 }
 
-double fv_expl_scheme(double *u, int nnodes, int i, double sigma, int ischeme) {
-    if (ischeme == 0) {
+double fv_expl_scheme(double *u, int nnodes, int i, double sigma, int ischeme1) {
+    if (ischeme1 == 0) {
         return LW_flux(u, nnodes, i, sigma);
     }
 }
@@ -35,8 +37,8 @@ double LW_flux(double *u, int nnodes, int i, double sigma) {
     return 0.5 * (u[iperio] + u[i1]) - 0.5 * sigma * (u[i1] - u[iperio]);
 }
 
-double fv_scheme(double *u, int nnodes, int i, int ischeme) {
-    if (ischeme == 0) {
+double fv_scheme(double *u, int nnodes, int i, int ischeme1) {
+    if (ischeme1 == 0) {
         return FOU_flux(u, nnodes, i);
     }
 }
