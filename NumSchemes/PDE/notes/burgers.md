@@ -18,6 +18,18 @@ $$
 x = x_0 + u_0(x_0) t
 $$
 
+The time of shock of a point $x_0$ of a profile is given by
+
+$$
+t_p(x_0) = - \frac{1}{u_x(x_0)}
+$$
+
+The time of shock of a profile is just the minimum
+
+$$
+t_s = \min_{x_0} t_p(x_0)
+$$
+
 ## Smooth solution to shock
 
 We consider a sin profile leading to shock at $t_s$ in the $[0, 1]$ domain
