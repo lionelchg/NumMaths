@@ -16,6 +16,10 @@ def compression_shock(x):
     """ Compression turning into a shock """
     return np.where(x <= 0, 1.5, np.where(x >= 1, - 1/2, 1.5 - 2 * x))
 
+def positive_smooth_shock(x, Lx, t_s, back):
+    """ Smooth solution only going right turning into a shock at t = t_s """
+    return (back + np.sin(2 * np.pi / Lx * x)) * Lx / (2 * np.pi * t_s)
+
 def ax_prop(ax, xlabel, ylabel, legend=True):
     ax.grid(True)
     ax.set_xlabel(xlabel)
@@ -26,7 +30,7 @@ def plot_profiles(x:np.ndarray, profiles: dict, t_s: float, figname: Path):
     # Plotting
     fig, axes = plt.subplots(nrows=2, figsize=(6, 8), sharex=True)
     for time, profile in profiles.items():
-        axes[0].plot(x, profile, label=f'{time:.2f}')
+        axes[0].plot(x, profile, label=f'{time:.2e}')
     ax_prop(axes[0], '$x$', '$u$')
 
     # Creation of characteristic from initial profile
@@ -106,3 +110,13 @@ if __name__ == '__main__':
     args_comp = {}
     run_burgers(x, compression_shock, args_comp,
             time_shock, fig_dir / 'compression_shock')
+
+    # Advance positive shock
+    xmin, xmax, nnx = -0.1, 0.1, 201
+    Lx = xmax - xmin
+    x = np.linspace(xmin, xmax, nnx)
+    time_shock = 1.0e-3
+    back = 1.1
+    args_shock = {'t_s': time_shock, 'back': back, 'Lx': Lx}
+    run_burgers(x, positive_smooth_shock, args_shock, 
+            time_shock, fig_dir / 'smooth_positive_shock')
