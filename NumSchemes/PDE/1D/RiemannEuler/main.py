@@ -54,3 +54,14 @@ if __name__ == '__main__':
     print(test3)
     print(test4)
     print(test5)
+
+    # Plot solutions
+    x = np.linspace(-1, 1, 401)
+    test1.plot_solution(x, 0.25, fig_dir / 'test1')
+    test2.plot_solution(x, 0.15, fig_dir / 'test2')
+    x = np.linspace(-1, 5, 501)
+    test3.plot_solution(x, 0.012, fig_dir / 'test3')
+    x = np.linspace(-3, 1, 501)
+    test4.plot_solution(x, 0.035, fig_dir / 'test4')
+    x = np.linspace(-1, 1, 501)
+    test5.plot_solution(x, 0.035, fig_dir / 'test5')

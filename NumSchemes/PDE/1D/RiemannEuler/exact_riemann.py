@@ -20,11 +20,20 @@ class ExactRiemann:
         self.a_L = np.sqrt(self.gamma * self.p_L / self.rho_L)
         self.a_R = np.sqrt(self.gamma * self.p_R / self.rho_R)
 
+        # Gamma related variables
+        self.gp12 = (self.gamma + 1) / 2
+        self.gm12 = (self.gamma - 1) / 2
+        self.gp1ogm1 = (self.gamma + 1) / (self.gamma - 1)
+        self.gp12og = self.gp12 / self.gamma
+        self.gm12og = self.gm12 / self.gamma
+
         # Solution in the star region
         self.p_star = 0.0
         self.rho_star = 0.0
         self.rhoL_star = 0.0
         self.rhoR_star = 0.0
+        self.SL = None
+        self.SR = None
     
     def solve_pstar(self, initial_guess='mean'):
         """ Find the pressure in the star region """
@@ -58,13 +67,133 @@ class ExactRiemann:
             - f_K(self.p_star, self.rho_L, self.p_L, self.gamma))
         self.rhoL_star = rho_star(self.rho_L, self.p_star / self.p_L, self.gamma)
         self.rhoR_star = rho_star(self.rho_R, self.p_star / self.p_R, self.gamma)
-    
+        self.aL_star = np.sqrt(self.gamma * self.p_star / self.rhoL_star)
+        self.aR_star = np.sqrt(self.gamma * self.p_star / self.rhoR_star)
+
+        # Compute shock speeds if necessary
+        if self.p_star > self.p_L:
+            self.SL = self.u_L - self.a_L * (self.gp12og * self.p_star / self.p_L 
+                        + self.gm12og)
+        if self.p_star > self.p_R:
+            self.SR = self.u_R + self.a_R * (self.gp12og * self.p_star / self.p_R 
+                        + self.gm12og)
     def __str__(self):
         result_str = f'{self.casename}:\n'
-        result_str += f'{self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e}\n'
-        result_str += f'{self.p_star:10.3e} | {self.u_star:10.3e} | {self.rhoL_star:10.3e} | {self.rhoR_star:10.3e}\n'
-        result_str += f'{self.rho_R:10.3e} | {self.u_R:10.3e} | {self.p_R:10.3e}\n'
+        result_str += f'W_L:     | {self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e} | {self.a_L:10.3e}\n'
+        result_str += f'W_Lstar: | {self.rhoL_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aL_star:10.3e}\n'
+        result_str += f'W_Rstar: | {self.rhoR_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aR_star:10.3e}\n'
+        result_str += f'W_R:     | {self.rho_R:10.3e} | {self.u_R:10.3e} | {self.p_R:10.3e} | {self.a_R:10.3e}\n'
+        if self.p_star > self.p_L:
+            result_str += f'Left Shock {self.SL:10.3e} m/s - '
+        else:
+            result_str += 'Left RW - '
+        if self.p_star > self.p_R:
+            result_str += f'Right Shock {self.SR:10.3e} m/s'
+        else:
+            result_str += 'Right RW'
+
         return result_str
+    
+    def construct_sol(self, x, time):
+        """ Construct the solution of Riemann problem at time t and for vector x """
+        x_left = x[x / time <= self.u_star]
+        left_sol = np.zeros((len(x_left), 3))
+        if self.p_star > self.p_L:
+            # Shock
+            left_sol[:, 0] = np.where(x_left / time < self.SL, self.rho_L, self.rhoL_star)
+            left_sol[:, 1] = np.where(x_left / time < self.SL, self.u_L, self.u_star)
+            left_sol[:, 2] = np.where(x_left / time < self.SL, self.p_L, self.u_star)
+        else:
+            # Rarefaction wave, compute the speeds
+            aL_star = self.a_L * (self.p_star / self.p_L)**((self.gamma - 1) / 2 / self.gamma)
+            S_HL = self.u_L - self.a_L
+            S_TL = self.u_star - aL_star
+
+            # Filter the vectors into three parts
+            x_L = x_left[x_left / time < S_HL]
+            x_rwave = x_left[(x_left / time >= S_HL) & (x_left / time <= S_TL)]
+            x_Lstar = x_left[x_left / time > S_TL]
+
+            # Compute the fan
+            W_Lfan = np.zeros((len(x_rwave), 3))
+            # Density
+            W_Lfan[:, 0] = self.rho_L * (2 / (self.gamma + 1) 
+                + (self.gamma - 1) / (self.gamma + 1) / self.a_L 
+                * (self.u_L - x_rwave / time))**(2 / (self.gamma - 1))
+            # Speed
+            W_Lfan[:, 1] = 2 / (self.gamma + 1) * (self.a_L 
+                + (self.gamma - 1) / 2 * self.u_L + x_rwave / time)
+            # Pressure
+            W_Lfan[:, 2] = self.p_L * (2 / (self.gamma + 1) 
+                + (self.gamma - 1) / (self.gamma + 1) / self.a_L 
+                * (self.u_L - x_rwave / time))**(2 * self.gamma / (self.gamma - 1))
+
+            # Reconstruct solution
+            left_sol[:, 0] = np.concatenate((self.rho_L * np.ones_like(x_L), W_Lfan[:, 0], self.rhoL_star * np.ones_like(x_Lstar)))
+            left_sol[:, 1] = np.concatenate((self.u_L * np.ones_like(x_L), W_Lfan[:, 1], self.u_star * np.ones_like(x_Lstar)))
+            left_sol[:, 2] = np.concatenate((self.p_L * np.ones_like(x_L), W_Lfan[:, 2], self.p_star * np.ones_like(x_Lstar)))
+        
+        x_right = x[x / time > self.u_star]
+        right_sol = np.zeros((len(x_right), 3))
+        if self.p_star > self.p_R:
+            # Shock
+            right_sol[:, 0] = np.where(x_right / time > self.SR, self.rho_R, self.rhoR_star)
+            right_sol[:, 1] = np.where(x_right / time > self.SR, self.u_R, self.u_star)
+            right_sol[:, 2] = np.where(x_right / time > self.SR, self.p_R, self.p_star)
+        else:
+            # Rarefaction wave, compute the speeds
+            aR_star = self.a_R * (self.p_star / self.p_R)**((self.gamma - 1) / 2 / self.gamma)
+            S_HR = self.u_star + aR_star
+            S_TR = self.u_R + self.a_R
+
+            # Filter the vectors into three parts
+            x_R = x_right[x_right / time < S_HR]
+            x_rwave = x_right[(x_right / time >= S_HR) & (x_right / time <= S_TR)]
+            x_Rstar = x_right[x_right / time > S_TR]
+
+            # Compute the fan
+            W_Rfan = np.zeros((len(x_rwave), 3))
+            # Density
+            W_Rfan[:, 0] = self.rho_R * (2 / (self.gamma + 1) 
+                - (self.gamma - 1) / (self.gamma + 1) / self.a_R 
+                * (self.u_R - x_rwave / time))**(2 / (self.gamma - 1))
+            # Speed
+            W_Rfan[:, 1] = 2 / (self.gamma + 1) * (- self.a_R 
+                + (self.gamma - 1) / 2 * self.u_R + x_rwave / time)
+            # Pressure
+            W_Rfan[:, 2] = self.p_R * (2 / (self.gamma + 1) 
+                - (self.gamma - 1) / (self.gamma + 1) / self.a_R 
+                * (self.u_R - x_rwave / time))**(2 * self.gamma / (self.gamma - 1))
+
+            # Reconstruct solution
+            right_sol[:, 0] = np.concatenate((self.rhoR_star * np.ones_like(x_R), W_Rfan[:, 0], self.rho_R * np.ones_like(x_Rstar)))
+            right_sol[:, 1] = np.concatenate((self.u_star * np.ones_like(x_R), W_Rfan[:, 1], self.u_R * np.ones_like(x_Rstar)))
+            right_sol[:, 2] = np.concatenate((self.p_star * np.ones_like(x_R), W_Rfan[:, 2], self.p_R * np.ones_like(x_Rstar)))
+        
+        sol = np.concatenate((left_sol, right_sol), axis=0)
+        return sol
+    
+    
+    def plot_solution(self, x, t, figname):
+        """ Plot the solution for vector x at instant t """
+        fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(8, 8))
+        sol = self.construct_sol(x, t)
+        internal_energy = sol[:, 2] / sol[:, 0] / (self.gamma - 1)
+        axes[0][0].plot(x, sol[:, 0])
+        ax_prop(axes[0][0], r'$x$ [m]', r'$\rho$ [kg/m$^3$]')
+        axes[0][1].plot(x, sol[:, 1])
+        ax_prop(axes[0][1], r'$x$ [m]', r'$u$ [m/s]')
+        axes[1][0].plot(x, sol[:, 2])
+        ax_prop(axes[1][0], r'$x$ [m]', r'$p$ [Pa]')
+        axes[1][1].plot(x, internal_energy)
+        ax_prop(axes[1][1], r'$x$ [m]', r'$e$ [J]')
+        fig.tight_layout()
+        fig.savefig(figname, bbox_inches='tight')
+
+def ax_prop(ax, xlabel, ylabel):
+    ax.grid(True)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
 
 def f_K(p, rho_K, p_K, gamma):
     """ Return the implicit function to find the pressure (Toro Chaper 4) """
