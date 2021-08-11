@@ -72,10 +72,10 @@ class ExactRiemann:
 
         # Compute shock speeds if necessary
         if self.p_star > self.p_L:
-            self.SL = self.u_L - self.a_L * (self.gp12og * self.p_star / self.p_L 
+            self.SL = self.u_L - self.a_L * np.sqrt(self.gp12og * self.p_star / self.p_L 
                         + self.gm12og)
         if self.p_star > self.p_R:
-            self.SR = self.u_R + self.a_R * (self.gp12og * self.p_star / self.p_R 
+            self.SR = self.u_R + self.a_R * np.sqrt(self.gp12og * self.p_star / self.p_R 
                         + self.gm12og)
     def __str__(self):
         result_str = f'{self.casename}:\n'
