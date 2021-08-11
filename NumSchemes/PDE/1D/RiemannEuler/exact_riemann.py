@@ -79,18 +79,20 @@ class ExactRiemann:
                         + self.gm12og)
     def __str__(self):
         result_str = f'{self.casename}:\n'
-        result_str += f'W_L:     | {self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e} | {self.a_L:10.3e}\n'
-        result_str += f'W_Lstar: | {self.rhoL_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aL_star:10.3e}\n'
-        result_str += f'W_Rstar: | {self.rhoR_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aR_star:10.3e}\n'
-        result_str += f'W_R:     | {self.rho_R:10.3e} | {self.u_R:10.3e} | {self.p_R:10.3e} | {self.a_R:10.3e}\n'
         if self.p_star > self.p_L:
             result_str += f'Left Shock {self.SL:10.3e} m/s - '
         else:
             result_str += 'Left RW - '
         if self.p_star > self.p_R:
-            result_str += f'Right Shock {self.SR:10.3e} m/s'
+            result_str += f'Right Shock {self.SR:10.3e} m/s\n'
         else:
-            result_str += 'Right RW'
+            result_str += 'Right RW\n'
+        result_str += f"         | {'rho':^10s} | {'u':^10s} | {'p':^10s} | {'a':^10s}\n"
+        result_str += '-'*60 + '\n'
+        result_str += f'W_L:     | {self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e} | {self.a_L:10.3e}\n'
+        result_str += f'W_Lstar: | {self.rhoL_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aL_star:10.3e}\n'
+        result_str += f'W_Rstar: | {self.rhoR_star:10.3e} | {self.u_star:10.3e} | {self.p_star:10.3e} | {self.aR_star:10.3e}\n'
+        result_str += f'W_R:     | {self.rho_R:10.3e} | {self.u_R:10.3e} | {self.p_R:10.3e} | {self.a_R:10.3e}\n'
 
         return result_str
     
