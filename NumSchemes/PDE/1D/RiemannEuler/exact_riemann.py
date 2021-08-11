@@ -45,6 +45,8 @@ class ExactRiemann:
             p_k = ((self.a_L + self.a_R - 0.5 * (self.gamma - 1) * (self.u_R - self.u_L)) 
                 / (self.a_L / self.p_L**((self.gamma - 1) / 2 / self.gamma) 
                     + self.a_L / self.p_L**((self.gamma - 1) / 2 / self.gamma)))**(2 * self.gamma / (self.gamma - 1))
+        elif isinstance(initial_guess, float):
+            p_k = initial_guess
         it = 0
         err = np.inf
         while (err > self.rtol):
@@ -58,6 +60,21 @@ class ExactRiemann:
                 print('Maximum number of iterations reached')
                 return p_k
         return p_k
+    
+    def plot_pfunction(self, figname):
+        """ Plot the pressure function for debugging """
+        p = np.linspace(0.8 * self.p_L, 1.2 * self.p_R, 201)
+        fig, ax = plt.subplots()
+        ax.plot(p, pressure_function(p, self.rho_L, self.u_L, self.p_L, 
+            self.rho_R, self.u_R, self.p_R, self.gamma))
+        ax.plot(p, np.zeros_like(p), color='k')
+        ax.grid(True)
+        ax.set_xlabel('$p$')
+        ax.set_ylabel('$f(p)$')
+        ax.legend()
+        ax.spines['top'].set_color('none')
+        ax.spines['right'].set_color('none')
+        fig.savefig(figname, bbox_inches='tight')
     
     def solve_riemann(self, initial_guess='mean'):
         """ Solve the Riemann problem by providing p_star, u_star, rhoL_star, rhoR_star """
@@ -181,13 +198,13 @@ class ExactRiemann:
         fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(8, 8))
         sol = self.construct_sol(x, t)
         internal_energy = sol[:, 2] / sol[:, 0] / (self.gamma - 1)
-        axes[0][0].plot(x, sol[:, 0])
+        axes[0][0].plot(x, sol[:, 0], 'k')
         ax_prop(axes[0][0], r'$x$ [m]', r'$\rho$ [kg/m$^3$]')
-        axes[0][1].plot(x, sol[:, 1])
+        axes[0][1].plot(x, sol[:, 1], 'k')
         ax_prop(axes[0][1], r'$x$ [m]', r'$u$ [m/s]')
-        axes[1][0].plot(x, sol[:, 2])
+        axes[1][0].plot(x, sol[:, 2], 'k')
         ax_prop(axes[1][0], r'$x$ [m]', r'$p$ [Pa]')
-        axes[1][1].plot(x, internal_energy)
+        axes[1][1].plot(x, internal_energy, 'k')
         ax_prop(axes[1][1], r'$x$ [m]', r'$e$ [J]')
         fig.tight_layout()
         fig.savefig(figname, bbox_inches='tight')
