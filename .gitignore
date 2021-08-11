@@ -1,6 +1,7 @@
 # Repositories
 figures/
 .vscode/
+data/
 
 # python
 __pycache__

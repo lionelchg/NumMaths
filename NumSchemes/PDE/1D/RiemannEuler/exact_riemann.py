@@ -191,6 +191,15 @@ class ExactRiemann:
         ax_prop(axes[1][1], r'$x$ [m]', r'$e$ [J]')
         fig.tight_layout()
         fig.savefig(figname, bbox_inches='tight')
+    
+    def print_solution(self, x, t, filename):
+        """ Print the solution to filename """
+        sol = self.construct_sol(x, t)
+        fp = open(filename, 'w')
+        fp.write(f"{'x':^10s} {'rho':^10s} {'u':^10s} {'p':^10s}")
+        for i in range(len(x)):
+            fp.write(f'{x[i]:10.3e} {sol[i, 0]:10.3e} {sol[i, 1]:10.3e} {sol[i, 2]:10.3e}\n')
+        fp.close()
 
 def ax_prop(ax, xlabel, ylabel):
     ax.grid(True)

@@ -10,6 +10,8 @@ if __name__ == '__main__':
     # Figures directory
     fig_dir = Path('figures')
     fig_dir.mkdir(parents=True, exist_ok=True)
+    data_dir = Path('data')
+    data_dir.mkdir(parents=True, exist_ok=True)
 
     # Define classes for Test 1 to 5 from Toro chapter 4
     test1 = ExactRiemann(1.0, 0.0, 1.0, 0.125, 0.0, 0.1, 1.4, 'Test 1')
@@ -35,7 +37,12 @@ if __name__ == '__main__':
     # Plot solutions
     x = np.linspace(-0.5, 0.5, 401)
     test1.plot_solution(x, 0.25, fig_dir / 'test1')
+    test1.print_solution(x, 0.25, data_dir / 'test1.dat')
     test2.plot_solution(x, 0.15, fig_dir / 'test2')
+    test2.print_solution(x, 0.15, data_dir / 'test2.dat')
     test3.plot_solution(x, 0.012, fig_dir / 'test3')
+    test3.print_solution(x, 0.012, data_dir / 'test3.dat')
     test4.plot_solution(x, 0.035, fig_dir / 'test4')
+    test4.print_solution(x, 0.035, data_dir / 'test4.dat')
     test5.plot_solution(x, 0.035, fig_dir / 'test5')
+    test5.print_solution(x, 0.035, data_dir / 'test5.dat')
