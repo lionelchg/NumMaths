@@ -104,7 +104,7 @@ class ExactRiemann:
             # Shock
             left_sol[:, 0] = np.where(x_left / time < self.SL, self.rho_L, self.rhoL_star)
             left_sol[:, 1] = np.where(x_left / time < self.SL, self.u_L, self.u_star)
-            left_sol[:, 2] = np.where(x_left / time < self.SL, self.p_L, self.u_star)
+            left_sol[:, 2] = np.where(x_left / time < self.SL, self.p_L, self.p_star)
         else:
             # Rarefaction wave, compute the speeds
             aL_star = self.a_L * (self.p_star / self.p_L)**((self.gamma - 1) / 2 / self.gamma)
