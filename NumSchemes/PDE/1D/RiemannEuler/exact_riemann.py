@@ -193,10 +193,10 @@ class ExactRiemann:
         return sol
     
     
-    def plot_solution(self, x, t, figname):
+    def plot_solution(self, x, x0, t, figname):
         """ Plot the solution for vector x at instant t """
         fig, axes = plt.subplots(ncols=2, nrows=2, figsize=(8, 8))
-        sol = self.construct_sol(x, t)
+        sol = self.construct_sol(x - x0, t)
         internal_energy = sol[:, 2] / sol[:, 0] / (self.gamma - 1)
         axes[0][0].plot(x, sol[:, 0], 'k')
         ax_prop(axes[0][0], r'$x$ [m]', r'$\rho$ [kg/m$^3$]')
@@ -209,9 +209,9 @@ class ExactRiemann:
         fig.tight_layout()
         fig.savefig(figname, bbox_inches='tight')
     
-    def print_solution(self, x, t, filename):
+    def print_solution(self, x, x0, t, filename):
         """ Print the solution to filename """
-        sol = self.construct_sol(x, t)
+        sol = self.construct_sol(x - x0, t)
         fp = open(filename, 'w')
         fp.write(f"{'x':^10s} {'rho':^10s} {'u':^10s} {'p':^10s}")
         for i in range(len(x)):
