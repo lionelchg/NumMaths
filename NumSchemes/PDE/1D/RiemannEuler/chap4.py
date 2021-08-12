@@ -1,3 +1,4 @@
+# Test cases in chapter 4 of Toro
 import numpy as np
 import matplotlib as mpl
 from pathlib import Path
@@ -8,9 +9,9 @@ mpl.rc('lines', linewidth=1.8)
 
 if __name__ == '__main__':
     # Figures directory
-    fig_dir = Path('figures/toro_tests')
+    fig_dir = Path('figures/toro_chap4')
     fig_dir.mkdir(parents=True, exist_ok=True)
-    data_dir = Path('data/toro_tests')
+    data_dir = Path('data/toro_chap4')
     data_dir.mkdir(parents=True, exist_ok=True)
 
     # Define classes for Test 1 to 5 from Toro chapter 4

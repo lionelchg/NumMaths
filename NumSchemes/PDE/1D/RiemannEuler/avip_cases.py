@@ -34,6 +34,7 @@ if __name__ == '__main__':
     print(case1)
 
     # Plot solutions
-    x = np.linspace(-0.5, 0.5, 401)
-    case1.plot_solution(x, 3e-4, fig_dir / 'case1')
-    case1.print_solution(x, 3e-4, data_dir / 'case1.dat')
+    x = np.linspace(0.0, 1.0, 401)
+    x0 = 0.5
+    case1.plot_solution(x, x0, 3e-4, fig_dir / 'case1')
+    case1.print_solution(x, x0, 3e-4, data_dir / 'case1.dat')

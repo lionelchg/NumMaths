@@ -87,23 +87,35 @@ class ExactRiemann:
         self.aL_star = np.sqrt(self.gamma * self.p_star / self.rhoL_star)
         self.aR_star = np.sqrt(self.gamma * self.p_star / self.rhoR_star)
 
-        # Compute shock speeds if necessary
+        # Compute shock speeds or head and tail speeds if necessary
         if self.p_star > self.p_L:
             self.SL = self.u_L - self.a_L * np.sqrt(self.gp12og * self.p_star / self.p_L 
                         + self.gm12og)
+        else:
+            # Rarefaction wave, compute the speeds
+            self.aL_star = self.a_L * (self.p_star / self.p_L)**((self.gamma - 1) / 2 / self.gamma)
+            self.S_HL = self.u_L - self.a_L
+            self.S_TL = self.u_star - self.aL_star
+
         if self.p_star > self.p_R:
             self.SR = self.u_R + self.a_R * np.sqrt(self.gp12og * self.p_star / self.p_R 
                         + self.gm12og)
+        else:
+            # Rarefaction wave, compute the speeds
+            self.aR_star = self.a_R * (self.p_star / self.p_R)**((self.gamma - 1) / 2 / self.gamma)
+            self.S_HR = self.u_star + self.aR_star
+            self.S_TR = self.u_R + self.a_R
+            
     def __str__(self):
         result_str = f'{self.casename}:\n'
         if self.p_star > self.p_L:
-            result_str += f'Left Shock {self.SL:10.3e} m/s - '
+            result_str += f'Left Shock S_L = {self.SL:10.3e} m/s - '
         else:
-            result_str += 'Left RW - '
+            result_str += f'Left RW - S_HL = {self.S_HL:10.3e} m/s - S_TL = {self.S_TL:10.3e} m/s - '
         if self.p_star > self.p_R:
             result_str += f'Right Shock {self.SR:10.3e} m/s\n'
         else:
-            result_str += 'Right RW\n'
+            result_str += f'Right RW - S_TR = {self.S_TR:10.3e} m/s - S_HR = {self.S_HR:10.3e} m/s\n'
         result_str += f"         | {'rho':^10s} | {'u':^10s} | {'p':^10s} | {'a':^10s}\n"
         result_str += '-'*60 + '\n'
         result_str += f'W_L:     | {self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e} | {self.a_L:10.3e}\n'
@@ -123,15 +135,10 @@ class ExactRiemann:
             left_sol[:, 1] = np.where(x_left / time < self.SL, self.u_L, self.u_star)
             left_sol[:, 2] = np.where(x_left / time < self.SL, self.p_L, self.p_star)
         else:
-            # Rarefaction wave, compute the speeds
-            aL_star = self.a_L * (self.p_star / self.p_L)**((self.gamma - 1) / 2 / self.gamma)
-            S_HL = self.u_L - self.a_L
-            S_TL = self.u_star - aL_star
-
             # Filter the vectors into three parts
-            x_L = x_left[x_left / time < S_HL]
-            x_rwave = x_left[(x_left / time >= S_HL) & (x_left / time <= S_TL)]
-            x_Lstar = x_left[x_left / time > S_TL]
+            x_L = x_left[x_left / time < self.S_HL]
+            x_rwave = x_left[(x_left / time >= self.S_HL) & (x_left / time <= self.S_TL)]
+            x_Lstar = x_left[x_left / time > self.S_TL]
 
             # Compute the fan
             W_Lfan = np.zeros((len(x_rwave), 3))
@@ -160,15 +167,10 @@ class ExactRiemann:
             right_sol[:, 1] = np.where(x_right / time > self.SR, self.u_R, self.u_star)
             right_sol[:, 2] = np.where(x_right / time > self.SR, self.p_R, self.p_star)
         else:
-            # Rarefaction wave, compute the speeds
-            aR_star = self.a_R * (self.p_star / self.p_R)**((self.gamma - 1) / 2 / self.gamma)
-            S_HR = self.u_star + aR_star
-            S_TR = self.u_R + self.a_R
-
             # Filter the vectors into three parts
-            x_R = x_right[x_right / time < S_HR]
-            x_rwave = x_right[(x_right / time >= S_HR) & (x_right / time <= S_TR)]
-            x_Rstar = x_right[x_right / time > S_TR]
+            x_R = x_right[x_right / time < self.S_HR]
+            x_rwave = x_right[(x_right / time >= self.S_HR) & (x_right / time <= self.S_TR)]
+            x_Rstar = x_right[x_right / time > self.S_TR]
 
             # Compute the fan
             W_Rfan = np.zeros((len(x_rwave), 3))
