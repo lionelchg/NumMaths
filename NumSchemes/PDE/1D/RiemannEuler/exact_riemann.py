@@ -103,8 +103,8 @@ class ExactRiemann:
         else:
             # Rarefaction wave, compute the speeds
             self.aR_star = self.a_R * (self.p_star / self.p_R)**((self.gamma - 1) / 2 / self.gamma)
-            self.S_HR = self.u_star + self.aR_star
-            self.S_TR = self.u_R + self.a_R
+            self.S_TR = self.u_star + self.aR_star
+            self.S_HR = self.u_R + self.a_R
             
     def __str__(self):
         result_str = f'{self.casename}:\n'
@@ -115,7 +115,7 @@ class ExactRiemann:
         if self.p_star > self.p_R:
             result_str += f'Right Shock: S_R = {self.SR:.3e} m/s\n'
         else:
-            result_str += f'Right RW:    S_HR = {self.S_HR:.3e} m/s - S_TR = {self.S_TR:.3e} m/s\n'
+            result_str += f'Right RW:    S_TR = {self.S_TR:.3e} m/s - S_HR = {self.S_HR:.3e} m/s\n'
         result_str += f"         | {'rho':^10s} | {'u':^10s} | {'p':^10s} | {'a':^10s}\n"
         result_str += '-'*60 + '\n'
         result_str += f'W_L:     | {self.rho_L:10.3e} | {self.u_L:10.3e} | {self.p_L:10.3e} | {self.a_L:10.3e}\n'
@@ -168,9 +168,9 @@ class ExactRiemann:
             right_sol[:, 2] = np.where(x_right / time > self.SR, self.p_R, self.p_star)
         else:
             # Filter the vectors into three parts
-            x_R = x_right[x_right / time < self.S_HR]
-            x_rwave = x_right[(x_right / time >= self.S_HR) & (x_right / time <= self.S_TR)]
-            x_Rstar = x_right[x_right / time > self.S_TR]
+            x_R = x_right[x_right / time < self.S_TR]
+            x_rwave = x_right[(x_right / time >= self.S_TR) & (x_right / time <= self.S_HR)]
+            x_Rstar = x_right[x_right / time > self.S_HR]
 
             # Compute the fan
             W_Rfan = np.zeros((len(x_rwave), 3))
