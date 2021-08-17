@@ -35,6 +35,9 @@ if __name__ == '__main__':
     print(test4)
     print(test5)
 
+    # Print information
+    test1.print_info(data_dir / 'summary.md')
+
     # Plot solutions
     x = np.linspace(0.0, 1.0, 401)
     x0 = 0.5
