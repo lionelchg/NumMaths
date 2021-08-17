@@ -41,6 +41,15 @@ if __name__ == '__main__':
     print(test6)
     print(test7)
 
+    # Write solution
+    test1.print_info(data_dir / 'summary.md')
+    test2.print_info(data_dir / 'summary.md')
+    test3.print_info(data_dir / 'summary.md')
+    test4.print_info(data_dir / 'summary.md')
+    test5.print_info(data_dir / 'summary.md')
+    test6.print_info(data_dir / 'summary.md')
+    test7.print_info(data_dir / 'summary.md')
+
     # Plot solutions
     x = np.linspace(0.0, 1.0, 201)
     x0 = 0.3

@@ -124,6 +124,27 @@ class ExactRiemann:
         result_str += f'W_R:     | {self.rho_R:10.3e} | {self.u_R:10.3e} | {self.p_R:10.3e} | {self.a_R:10.3e}\n'
 
         return result_str
+
+    def print_info(self, filename):
+        """ Print info in markdown format """
+        fp = open(filename, 'a')
+        result_str = f'### {self.casename}\n\n'
+        if self.p_star > self.p_L:
+            result_str += f'Left Shock:  $S_L$ = {self.SL:.3f} m/s\n'
+        else:
+            result_str += f'Left RW:     $S_{{HL}}$ = {self.S_HL:.3f} m/s - $S_{{TL}}$ = {self.S_TL:.3f} m/s\n'
+        if self.p_star > self.p_R:
+            result_str += f'Right Shock: $S_R$ = {self.SR:.3f} m/s\n'
+        else:
+            result_str += f'Right RW:    $S_{{TR}}$ = {self.S_TR:.3f} m/s - $S_{{HR}}$ = {self.S_HR:.3f} m/s\n'
+        result_str += f"\n|         | {'rho':^10s} | {'u':^10s} | {'p':^10s} | {'a':^10s}|\n"
+        result_str += '|-|-|-|-|-|\n'
+        result_str += f'|W_L:     | {self.rho_L:10.3f} | {self.u_L:10.3f} | {self.p_L:10.3f} | {self.a_L:10.3f}|\n'
+        result_str += f'|W_Lstar: | {self.rhoL_star:10.3f} | {self.u_star:10.3f} | {self.p_star:10.3f} | {self.aL_star:10.3f}|\n'
+        result_str += f'|W_Rstar: | {self.rhoR_star:10.3f} | {self.u_star:10.3f} | {self.p_star:10.3f} | {self.aR_star:10.3f}|\n'
+        result_str += f'|W_R:     | {self.rho_R:10.3f} | {self.u_R:10.3f} | {self.p_R:10.3f} | {self.a_R:10.3f}|\n\n'
+        fp.write(result_str)
+        fp.close()
     
     def construct_sol(self, x, time):
         """ Construct the solution of Riemann problem at time t and for vector x """
