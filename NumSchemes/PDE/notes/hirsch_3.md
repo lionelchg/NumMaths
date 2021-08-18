@@ -84,7 +84,7 @@ Moreover since the two vectors $(j\sqrt{b_j})$ and $(\sqrt{b_j})$ are non coline
 #### High-resolution schemes and the concept of limiters
 
 1. Select a first-order monotone scheme (usually the upwind scheme), as reference. Express the high order scheme as the monotone scheme plus additional terms
-2. Multiply the additional terms by a limiting funciton $\Psi(r_i)$, expressed as a function of ratios of successive gradients.
+2. Multiply the additional terms by a limiting function $\Psi(r_i)$, expressed as a function of ratios of successive gradients.
 3. Express the monotonicity conditions to derive conditions on the limiters
 
 For example for a second order upwind scheme:

@@ -80,7 +80,7 @@ $$
 Then requiring the scheme to be of order $p$ yields the condition:
 
 $$
-    \pdv{u}{t} + a \pdv{u}{x} = \mc{O}(\Delta x^p) \implies \sum_j b_j j^p = (-\sig)^m \:\: \mrm{for}\: m \in \intint{0}{p}
+    \pdv{u}{t} + a \pdv{u}{x} = \mc{O}(\Delta x^p) \implies \sum_j b_j j^m = (-\sig)^m \:\: \mrm{for}\: m \in \intint{0}{p}
 $$
 
 When the scheme is of order $p$ then the numerical scheme writes:
