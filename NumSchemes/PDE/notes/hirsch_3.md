@@ -124,6 +124,8 @@ $$
     \Psi(1) = 1
 $$
 
+Moreover, though theoretically acceptable, solutions outside $\Psi = r$ and $\Psi = 1$ lead to schemes which are overcompressive (turning sine waves into square wave forms).
+
 For the SOU scheme as base:
 
 $$

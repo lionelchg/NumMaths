@@ -30,6 +30,7 @@ def alpha_lim(r, alpha):
         np.minimum.reduce([2 * r, alpha * r + (1 - alpha), 2 * ones]))
 
 def ax_prop(ax, title):
+    ax.grid(True)
     ax.set_title(title)
     ax.set_xlim([0, 3])
     ax.set_ylim([0, 2.5])
@@ -37,7 +38,6 @@ def ax_prop(ax, title):
 if __name__ == '__main__':
     fig_dir = 'figures/'
     r = np.linspace(0, 3, 301)
-    # sns.set_theme('notebook')
     fig, axes = plt.subplots(nrows=3, ncols=2, 
         figsize=(10, 10), sharex=True, sharey=True)
     axes = axes.reshape(-1)
@@ -53,4 +53,10 @@ if __name__ == '__main__':
     ax_prop(axes[4], 'Osher limiter')
     axes[5].plot(r, alpha_lim(r, 2 / 3))
     ax_prop(axes[5], r'$\alpha = 2/3$-limiter')
+
+    # Shaded area for stability
+    stab_curve_up = np.where(r <= 1, np.minimum(2 * r, np.ones_like(r)), np.minimum(r, 2 * np.ones_like(r)))
+    stab_curve_down = np.where(r <= 1, r, 1)
+    for ax in axes:
+        ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
     fig.savefig(f'{fig_dir}limiters', bbox_inches='tight')
