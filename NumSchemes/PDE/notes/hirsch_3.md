@@ -139,7 +139,7 @@ Various limiters can then be defined:
 $$
 \begin{aligned}
 &\mrm{Van Leer} \qquad \Psi(r) = \frac{r + |r|}{1 + r} \\
-&\mrm{Min-mod} \qquad \Psi(r) = \mrm{min-mod}(r, 1) \\
+&\mrm{Min-mod} \qquad \Psi(r) = \mrm{minmod}(r, 1) \\
 &\mrm{Superbee} \qquad \Psi(r) = \max(0, \min(2r, 1), \min(r, 2)) \\
 &\beta-\mrm{limiters} \qquad \Psi(r) = \max(0, \min(\beta r, 1), \min(r, \beta)) \\
 &\mrm{Osher limiter} \qquad \Psi(r) = \max(0, \min(r, 2)) \\

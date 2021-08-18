@@ -147,12 +147,10 @@ def main(args):
     fig_dir = Path(f'figures/{args.figdir}/')
     cvg_dir = fig_dir / 'cvg'
     sim_dir = fig_dir / 'sim'
-    sp_dir = fig_dir / 'sp'
 
     # Create the directories
     cvg_dir.mkdir(parents=True, exist_ok=True)
     sim_dir.mkdir(parents=True, exist_ok=True)
-    sp_dir.mkdir(parents=True, exist_ok=True)
     
     # Schemes selected
     schemes = args.schemes
@@ -166,7 +164,7 @@ def main(args):
 
     # Launch simulations
     cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
-    run_sims(a, cfls, xmin, xmax, 401, 1.0, schemes, sim_dir)
+    run_sims(a, cfls, xmin, xmax, 201, 1.0, schemes, sim_dir)
 
     # Mesh convergence of the schemes
     functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']
