@@ -28,14 +28,14 @@ void write_vecs(double **list_vec, int n, int m, char **vec_names, char *filenam
     }
     // Write header
     for (j = 0; j < m; j++) {
-        fprintf(fptr, "%12s", vec_names[j]);
+        fprintf(fptr, "%13s", vec_names[j]);
     }
     fprintf(fptr, "\n");
 
     // Write vector contents
     for (i = 0; i < n; i++) {
         for (j = 0; j < m; j++) {
-            fprintf(fptr, "%12.4e", list_vec[j][i]);
+            fprintf(fptr, "%13.4e", list_vec[j][i]);
         }
         fprintf(fptr, "\n");
     }

@@ -37,9 +37,9 @@ if __name__ == '__main__':
     fig_dir.mkdir(parents=True, exist_ok=True)
     args = argparse.ArgumentParser(description="Post-process 1D FV data")
     args.add_argument("-d", "--data_fn", type=str, nargs='+',
-            required=True, help="Data filename")
+            required=True, help="Data filename(s)")
     args.add_argument("-f", "--figname", type=str, 
-            required=True, help="Data filename")
+            required=True, help="Figure filename")
     args = args.parse_args()
 
     plot(args.data_fn, fig_dir / args.figname)

@@ -108,7 +108,7 @@ $$
 \begin{aligned}
 \dv{u_i}{t} &= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{\Delta x}(\frac{1}{2}(u_i - u_{i-1}) - \frac{1}{2}(u_{i-1} - u_{i-2})) \\
 &= - \frac{a}{\Delta x}((u_i - u_{i-1}) - \frac{a}{\Delta x}(\frac{1}{2}\Psi(r_i)(u_i - u_{i-1}) - \frac{1}{2}\Psi(r_{i-1})(u_{i-1} - u_{i-2})) \\
-&= - \frac{a}{\Delta x}\left[1 - \frac{1}{2}\Psi(r_i) + \frac{1}{2}\Psi(r_{i-1})/r_{i-1}\right](u_i - u_{i-1})
+&= - \frac{a}{\Delta x}\left[1 + \frac{1}{2}\Psi(r_i) - \frac{1}{2}\Psi(r_{i-1})/r_{i-1}\right](u_i - u_{i-1})
 \end{aligned}
 $$
 

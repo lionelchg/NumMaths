@@ -26,6 +26,10 @@ int* scheme_id(char* scheme) {
         ischeme[0] = 1;
         ischeme[1] = 3;
     }
+    else if (strcmp(scheme, "Lim") == 0) {
+        ischeme[0] = 1;
+        ischeme[1] = 4;
+    }
     return ischeme;
 }
 
@@ -88,6 +92,9 @@ double fv_scheme(double *u, int nnodes, int i, int ischeme1) {
     else if (ischeme1 == 3) {
         return kappa_flux(u, nnodes, i, 1.0 / 3.0);
     }
+    else if (ischeme1 == 4) {
+        return kappa_flux_lim(u, nnodes, i, 1.0 / 3.0);
+    }
 }
 
 double FOU_flux(double *u, int nnodes, int i) {
@@ -113,4 +120,38 @@ int periodic_index(int index, int nnodes) {
     else {
         return index;
     }
+}
+
+double kappa_flux_lim(double *u, int nnodes, int i, double kappa) {
+    int im1 = periodic_index(i - 1, nnodes);
+    int iperio = periodic_index(i, nnodes);
+    int i1 = periodic_index(i + 1, nnodes);
+    return u[iperio] + 0.25 * ((1.0 + kappa) * (u[i1] - u[iperio]) 
+                    + (1.0 - kappa) * (u[iperio] - u[im1])) * van_leer(grad_ratio(u, iperio, i1, im1));
+    // return u[iperio] + 0.25 * ((1.0 + kappa) * (u[i1] - u[iperio]) 
+    //                 + (1.0 - kappa) * (u[iperio] - u[im1])) * superbee(grad_ratio(u, iperio, i1, im1));
+}
+
+double grad_ratio(double *u, int i, int i1, int im1) {
+    double r_i;
+    if (u[i1] == u[i]) {
+        r_i = 0.0;
+    }
+    else if (u[i] == u[im1]) {
+        r_i = 10.0 * (u[i1] - u[i]) / fabs(u[i1] - u[i]);
+    }
+    else {
+        r_i = (u[i1] - u[i]) / (u[i] - u[im1]);
+    }
+    return r_i;
+}
+
+double van_leer(double r) {
+    if (r <= 0) return 0.0;
+    else return (r + fabs(r)) / (1.0 + r);
+}
+
+double superbee(double r) {
+    if (r <= 0) return 0.0;
+    else return fmax(fmin(2 * r, 1.0), fmin(r, 2.0));
 }

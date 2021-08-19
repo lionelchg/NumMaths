@@ -28,4 +28,10 @@ double WB_flux(double *u, int nnodes, int i, double sigma);
 double FOU_flux(double *u, int nnodes, int i);
 double kappa_flux(double *u, int nnodes, int i, double kappa);
 
+// List of limiters with kappa flux limited
+double kappa_flux_lim(double *u, int nnodes, int i, double kappa);
+double grad_ratio(double *u, int i, int i1, int im1);
+double van_leer(double r);
+double superbee(double r);
+
 #endif
