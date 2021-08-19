@@ -83,3 +83,14 @@ The following table summarizes the remarkable values of this scheme
 | Fromm | 1 | 0 |
 | Quick scheme | 1 | 1/2 |
 | Third order accurate | 1 | 1/3 |
+
+Application of limiter on top of the $\kappa$-scheme is straightforward:
+
+$$
+u_{i+1/2} = u_i + \Psi(r_i)\left[\frac{1 + \kappa}{4}(u_{i+1} - u_i) + \frac{1 - \kappa}{4}(u_i - u_{i-1})\right]
+$$
+
+However only limiters with $\kappa = -1$ (second order upwind) yield reasonable results. The results with those schemes where $\sig$ is not present at all in the coefficients yield results that are far from the limited finite difference ones.
+
+
+
