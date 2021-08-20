@@ -76,7 +76,7 @@ double LW_flux(double *u, int nnodes, int i, double sigma) {
 double WB_flux(double *u, int nnodes, int i, double sigma) {
     int iperio = periodic_index(i, nnodes);
     int im1 = periodic_index(i - 1, nnodes);
-    return 0.5 * (u[iperio] + u[im1]) - 0.5 * sigma * (u[iperio] - u[im1]);
+    return u[iperio] + 0.5 * (1.0 - sigma) * (u[iperio] - u[im1]);
 }
 
 double fv_scheme(double *u, int nnodes, int i, int ischeme1) {
