@@ -10,7 +10,7 @@
 int main(int argc, char** argv) {
     // All arguments of CLI are schemes
     int index_scheme, nschemes;
-    char **schemes;
+    char **schemes, **limiters;
     char *data_dir = "data/";
     mkdir(data_dir, 0777);
 
@@ -24,9 +24,10 @@ int main(int argc, char** argv) {
     // Copy to local variables
     nschemes = arguments.nschemes;
     schemes = arguments.args;
+    limiters = arguments.args + nschemes;
     printf("Number of schemes: %d\n", nschemes);
     for (index_scheme = 0; index_scheme < arguments.nschemes; index_scheme++) {
-        printf("%s\n", schemes[index_scheme]);
+        printf("%s - %s\n", schemes[index_scheme], limiters[index_scheme]);
     } 
     printf("Output filename: %s\n", arguments.outfile);
 
@@ -49,7 +50,7 @@ int main(int argc, char** argv) {
     hid_t file, group;
     herr_t status;
     char *grpname_base = "/cfl_";
-    char grpname[lenstr], dsetname[lenstr];
+    char grpname[lenstr], dsetname[lenstr], scheme_name[lenstr];
     file = H5Fcreate(arguments.outfile, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
     // Write common x vector
@@ -81,7 +82,7 @@ int main(int argc, char** argv) {
             double *u_4pw = packet_wave(x, x0, 0.25, 1.0, nnx);
 
             // Iterate using scheme
-            int* ischeme = scheme_id(schemes[index_scheme]); 
+            int* ischeme = scheme_id(schemes[index_scheme], limiters[index_scheme]); 
             rungekutta(u_gauss, nnx, dx, dt, conv_speed, ischeme, nt);
             rungekutta(u_step, nnx, dx, dt, conv_speed, ischeme, nt);
             rungekutta(u_2pw, nnx, dx, dt, conv_speed, ischeme, nt);
@@ -95,7 +96,8 @@ int main(int argc, char** argv) {
             results[3] = u_4pw;
             
             sprintf(dsetname, "scheme_%d", index_scheme);
-            write_dset_2d(group, dsetname, schemes[index_scheme], 4, nnx, results);
+            sprintf(scheme_name, "%s_%s", schemes[index_scheme], limiters[index_scheme]);
+            write_dset_2d(group, dsetname, scheme_name, 4, nnx, results);
         }
         // Close group
         status = H5Gclose (group);
