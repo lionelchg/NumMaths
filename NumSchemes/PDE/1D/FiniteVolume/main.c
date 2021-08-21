@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
     // Parsing CLI
     struct arguments arguments;
     arguments.nschemes = 1;
-    arguments.outfile = "solut.dat";
+    arguments.outfile = "data/solut.h5";
     arguments.verbose = 0;
     argp_parse(&argp, argc, argv, 0, 0, &arguments);
 
@@ -45,8 +45,19 @@ int main(int argc, char** argv) {
     double cfls[5] = {0.1, 0.3, 0.5, 0.7, 0.9};
     double n_periods = 1.0;
 
+    // Creation of HDF5 file and related variables
+    hid_t file, group;
+    herr_t status;
+    char *grpname_base = "/cfl_";
+    char grpname[lenstr], dsetname[lenstr];
+    file = H5Fcreate(arguments.outfile, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
+
     // Looping on CFLs
     for (icfl = 0; icfl < 5; icfl++) {
+        // Create HDF group
+        sprintf(grpname, "%s%d", grpname_base, icfl);
+        group = create_group(file, grpname, cfls[icfl]);
+
         // Running simulation for a given cfl
         double cfl = cfls[0];
         double dt = dx * cfl / conv_speed;
@@ -59,7 +70,6 @@ int main(int argc, char** argv) {
 
         // Iterate on schemes
         for (index_scheme = 0; index_scheme < nschemes; index_scheme++) {
-            // printf("Running %s schemen", schemes[index_scheme]);
             // Create 4 profiles
             double *u_gauss = gaussian(x, x0, 0.3, nnx);
             double *u_step = step(x, x0, 1.0, nnx);
@@ -85,7 +95,15 @@ int main(int argc, char** argv) {
             char data_fn[lenstr];
             sprintf(data_fn, "%s%s_cfl_%d.dat", data_dir, schemes[index_scheme], icfl);
             write_vecs(results, nnx, 5, vec_names, data_fn);
+            sprintf(dsetname, "scheme_%d", index_scheme);
+            write_dset(group, dsetname, schemes[index_scheme], 5, nnx, results);
         }
+        // Close group
+        status = H5Gclose (group);
     }
+
+    // Close HDF5 file
+    status = H5Fclose (file);
+
     return 0;
 }

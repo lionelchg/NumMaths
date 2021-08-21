@@ -21,7 +21,7 @@ double* copy_vec(double *vec, int n);
 // Linearly spaced array
 double* linspace(double begin, double end, int npoints);
 
-// HDF5 related routines
+// HDF5 writing related routines
 hid_t create_group(hid_t file, char *grpname, double cfl);
 void write_dset(hid_t group, char *dsetname, char *scheme, int dim0, int dim1, double **wdata);
 
