@@ -28,6 +28,10 @@ int* scheme_id(char* scheme, char* limiter) {
         ischeme[0] = 1;
         ischeme[1] = 3;
     }
+    else if (strcmp(scheme, "SOU") == 0) {
+        ischeme[0] = 1;
+        ischeme[1] = 4;
+    }
 
     // Limiter parsing
     if (strcmp(limiter, "no") == 0) {
@@ -114,6 +118,9 @@ double fv_scheme(double *u, int nnodes, int i, int* ischeme) {
     }
     else if (ischeme[1] == 3) {
         return kappa_flux(u, nnodes, i, 1.0 / 3.0, ischeme[2]);
+    }
+    else if (ischeme[1] == 4) {
+        return kappa_flux(u, nnodes, i, -1.0, ischeme[2]);
     }
 }
 
