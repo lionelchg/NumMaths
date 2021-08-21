@@ -77,3 +77,78 @@ double *linspace(double begin, double end, int npoints)
     }
     return array;
 }
+
+hid_t create_group(hid_t file, char *grpname, double cfl) {
+    // HDF5 variables
+    hid_t group, space, attr;
+    herr_t status;
+
+    // Local variables
+    char *attrcfl = "cfl";
+
+
+    group = H5Gcreate (file, grpname, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+    
+    /*
+    * Create float attribute
+    */
+    space = H5Screate(H5S_SCALAR);
+    attr = H5Acreate (group, attrcfl, H5T_IEEE_F64LE, space, H5P_DEFAULT,
+                H5P_DEFAULT);
+    status = H5Awrite (attr, H5T_NATIVE_DOUBLE, &cfl);
+
+    /*
+    * Close and release resources.
+    */
+    status = H5Aclose (attr);
+    status = H5Sclose (space);
+
+    return group;
+}
+
+void write_dset(hid_t group, char *dsetname, char *scheme, int dim0, int dim1, double **wdata) {
+    // HDF5 variables
+    hid_t space, dset, atype, attr;
+    herr_t status;
+    hsize_t dims[2] = {dim0, dim1};
+
+    // Local variables
+    char *attrscheme = "scheme";
+    int i, j;
+    double wbuffer[dim0][dim1];
+
+    // Init data
+    for (i = 0; i < dim0; i++)
+        for (j = 0; j < dim1; j++)
+            wbuffer[i][j] = wdata[i][j];
+
+    // Create dataspace for the given scheme
+    space = H5Screate_simple(2, dims, NULL);
+
+    /*
+    * Create the dataset and write the floating point data to it.  In
+    * this example we will save the data as 64 bit little endian IEEE
+    * floating point numbers, regardless of the native type.  The HDF5
+    * library automatically converts between different floating point
+    * types.
+    */
+    dset = H5Dcreate(group, dsetname, H5T_IEEE_F64LE, space, H5P_DEFAULT,
+                    H5P_DEFAULT, H5P_DEFAULT);
+    status = H5Dwrite(dset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT,
+                    wbuffer[0]);
+
+    // Create attribute for the name of the scheme
+    space = H5Screate(H5S_SCALAR);
+    atype = H5Tcopy(H5T_C_S1);
+    H5Tset_size(atype, 10);
+    attr = H5Acreate (dset, attrscheme, atype, space, H5P_DEFAULT,
+                H5P_DEFAULT);
+    status = H5Awrite (attr, atype, scheme);
+
+    /*
+    * Close and release resources.
+    */
+    status = H5Aclose (attr);
+    status = H5Dclose (dset);
+    status = H5Sclose (space);
+}
