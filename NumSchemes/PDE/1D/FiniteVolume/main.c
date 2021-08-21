@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
         group = create_group(file, grpname, cfls[icfl]);
 
         // Running simulation for a given cfl
-        double cfl = cfls[0];
+        double cfl = cfls[icfl];
         double dt = dx * cfl / conv_speed;
 
         // Number of iterations
