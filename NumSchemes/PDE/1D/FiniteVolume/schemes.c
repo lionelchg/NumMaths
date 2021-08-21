@@ -6,9 +6,17 @@ int* scheme_id(char* scheme) {
         ischeme[0] = 0;
         ischeme[1] = 0;
     }
+    else if (strcmp(scheme, "LW_Lim") == 0) {
+        ischeme[0] = 0;
+        ischeme[1] = 2;
+    }
     else if (strcmp(scheme, "WB") == 0) {
         ischeme[0] = 0;
         ischeme[1] = 1;
+    }
+    else if (strcmp(scheme, "WB_Lim") == 0) {
+        ischeme[0] = 0;
+        ischeme[1] = 3;
     }
     else if (strcmp(scheme, "FOU") == 0) {
         ischeme[0] = 1;
@@ -65,18 +73,40 @@ double fv_expl_scheme(double *u, int nnodes, int i, double sigma, int ischeme1) 
     else if (ischeme1 == 1) {
         return WB_flux(u, nnodes, i, sigma);
     }
+    else if (ischeme1 == 2) {
+        return LW_flux_lim(u, nnodes, i, sigma);
+    }
+    else if (ischeme1 == 3) {
+        return WB_flux_lim(u, nnodes, i, sigma);
+    }
 }
 
 double LW_flux(double *u, int nnodes, int i, double sigma) {
     int iperio = periodic_index(i, nnodes);
     int i1 = periodic_index(i + 1, nnodes);
-    return 0.5 * (u[iperio] + u[i1]) - 0.5 * sigma * (u[i1] - u[iperio]);
+    return u[iperio] + 0.5 * (1.0 - sigma) * (u[i1] - u[iperio]);
 }
 
 double WB_flux(double *u, int nnodes, int i, double sigma) {
     int iperio = periodic_index(i, nnodes);
     int im1 = periodic_index(i - 1, nnodes);
     return u[iperio] + 0.5 * (1.0 - sigma) * (u[iperio] - u[im1]);
+}
+
+double LW_flux_lim(double *u, int nnodes, int i, double sigma) {
+    int iperio = periodic_index(i, nnodes);
+    int i1 = periodic_index(i + 1, nnodes);
+    int im1 = periodic_index(i - 1, nnodes);
+    // return u[iperio] + 0.5 * (1.0 - sigma) * (u[i1] - u[iperio]) * van_leer(grad_ratio(u, iperio, im1, i1));
+    return u[iperio] + 0.5 * (1.0 - sigma) * (u[i1] - u[iperio]) * superbee(grad_ratio(u, iperio, im1, i1));
+}
+
+double WB_flux_lim(double *u, int nnodes, int i, double sigma) {
+    int iperio = periodic_index(i, nnodes);
+    int i1 = periodic_index(i + 1, nnodes);
+    int im1 = periodic_index(i - 1, nnodes);
+    // return u[iperio] + 0.5 * (1.0 - sigma) * (u[iperio] - u[im1]) * van_leer(grad_ratio(u, iperio, i1, im1));
+    return u[iperio] + 0.5 * (1.0 - sigma) * (u[iperio] - u[im1]) * superbee(grad_ratio(u, iperio, i1, im1));
 }
 
 double fv_scheme(double *u, int nnodes, int i, int ischeme1) {

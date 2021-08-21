@@ -23,6 +23,8 @@ int periodic_index(int index, int nnodes);
 // List of 1 step eplicit schemes
 double LW_flux(double *u, int nnodes, int i, double sigma);
 double WB_flux(double *u, int nnodes, int i, double sigma);
+double LW_flux_lim(double *u, int nnodes, int i, double sigma);
+double WB_flux_lim(double *u, int nnodes, int i, double sigma);
 
 // List of general schemes
 double FOU_flux(double *u, int nnodes, int i);
