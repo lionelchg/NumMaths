@@ -52,6 +52,10 @@ int main(int argc, char** argv) {
     char grpname[lenstr], dsetname[lenstr];
     file = H5Fcreate(arguments.outfile, H5F_ACC_TRUNC, H5P_DEFAULT, H5P_DEFAULT);
 
+    // Write common x vector
+    sprintf(dsetname, "x", index_scheme);
+    write_dset_1d(file, dsetname, nnx, x);
+
     // Looping on CFLs
     for (icfl = 0; icfl < 5; icfl++) {
         // Create HDF group
@@ -84,19 +88,14 @@ int main(int argc, char** argv) {
             rungekutta(u_4pw, nnx, dx, dt, conv_speed, ischeme, nt);
 
             // Print results
-            double *results[5];
-            results[0] = x;
-            results[1] = u_gauss;
-            results[2] = u_step;
-            results[3] = u_2pw;
-            results[4] = u_4pw;
-            char *vec_names[5] = {"position", "Gaussian", "Step", "Sin_2", "Sin_4"};
+            double *results[4];
+            results[0] = u_gauss;
+            results[1] = u_step;
+            results[2] = u_2pw;
+            results[3] = u_4pw;
             
-            char data_fn[lenstr];
-            sprintf(data_fn, "%s%s_cfl_%d.dat", data_dir, schemes[index_scheme], icfl);
-            write_vecs(results, nnx, 5, vec_names, data_fn);
             sprintf(dsetname, "scheme_%d", index_scheme);
-            write_dset(group, dsetname, schemes[index_scheme], 5, nnx, results);
+            write_dset_2d(group, dsetname, schemes[index_scheme], 4, nnx, results);
         }
         // Close group
         status = H5Gclose (group);
