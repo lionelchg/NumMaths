@@ -16,9 +16,10 @@ def compression_shock(x):
     """ Compression turning into a shock """
     return np.where(x <= 0, 1.5, np.where(x >= 1, - 1/2, 1.5 - 2 * x))
 
-def positive_smooth_shock(x, Lx, t_s, back):
+def positive_smooth_shock(x, Lx, t_s, back, sigma):
     """ Smooth solution only going right turning into a shock at t = t_s """
-    return (back + np.sin(2 * np.pi / Lx * x)) * Lx / (2 * np.pi * t_s)
+    return np.where(np.abs(x) < 0.5 * sigma, 
+        (np.sin(2 * np.pi / Lx * x)) * Lx / (2 * np.pi * t_s), 0) + back
 
 def ax_prop(ax, xlabel, ylabel, legend=True):
     ax.grid(True)
@@ -112,11 +113,12 @@ if __name__ == '__main__':
             time_shock, fig_dir / 'compression_shock')
 
     # Advance positive shock
-    xmin, xmax, nnx = -0.1, 0.1, 201
-    Lx = xmax - xmin
+    xmin, xmax, nnx = -1.0, 1.0, 201
+    Lx = 1.0
     x = np.linspace(xmin, xmax, nnx)
-    time_shock = 1.0e-3
-    back = 1.1
-    args_shock = {'t_s': time_shock, 'back': back, 'Lx': Lx}
+    time_shock = 1.0
+    back = 0.5
+    args_shock = {'t_s': time_shock, 'back': back, 
+            'Lx': Lx, 'sigma': 1.0}
     run_burgers(x, positive_smooth_shock, args_shock, 
             time_shock, fig_dir / 'smooth_positive_shock')

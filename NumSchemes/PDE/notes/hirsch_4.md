@@ -92,5 +92,10 @@ $$
 
 However only limiters with $\kappa = -1$ (second order upwind) yield reasonable results. The results with those schemes where $\sig$ is not present at all in the coefficients yield results that are far from the limited finite difference ones.
 
+The best candidate to adapt the scheme into AVIP would be the FV Lax-Wendroff scheme:
 
+$$
+u_{i+1/2} = u_i + \frac{1-\sig}{2}(u_{i + 1} - u_i) \Psi(R_i)
+$$
 
+where $R_i = (u_i - u_{i - 1}) / (u_{i + 1} - u_i)$
