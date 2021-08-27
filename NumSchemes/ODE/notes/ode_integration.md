@@ -187,7 +187,7 @@ $$
 To study the stability of a system of ODEs the following steps are taken
 
 1. Set $v^n = g^n v^0$ where $g$ is the amplification factor in the scheme
-2. Set $f^n = g^n \lambda$ (imply linearization and reduction) where $\lambda$ is an eigenvalue in fact of the specific problem at hand
+2. Set $f^n = g^n v^0 \lambda$ (imply linearization and reduction) where $\lambda$ is an eigenvalue in fact of the specific problem at hand
 3. Solve for the roots of the polynomial in $g$ where the roots depend on $\lambda \Delta t$
 4. Determine the regions where $|g| \leq 1$
 
