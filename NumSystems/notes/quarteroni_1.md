@@ -51,7 +51,7 @@ otherwise.
 
 ### Singular Value Decomposition
 
-Let $A \in \mc{M}_{mn}(\CC)$. There exists two unitary matrices $U \in \mc{M}_m(\CC)$ and $V \in \mc{M}_m(\CC)$ such that
+Let $A \in \mc{M}_{mn}(\CC)$. There exists two unitary matrices $U \in \mc{M}_m(\CC)$ and $V \in \mc{M}_n(\CC)$ such that
 
 $$
 U^H A V = \Sigma = \mrm{diag}(\sigma_1, \ldots, \sigma_p) \in \mc{M}_{mn}(\CC)
