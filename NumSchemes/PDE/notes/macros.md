@@ -2,6 +2,7 @@
 $$
     \gdef\mrm#1{\mathrm{#1}}
     \gdef\pmdv#1#2#3{\frac{\partial^{#3} #1}{\partial #2^{#3}}}
+    \gdef\intint#1#2{\llbracket #1, #2 \rrbracket}
     \gdef\veps{\varepsilon}
     \gdef\sig{\sigma}
     \gdef\P{\mathbb{P}}

@@ -97,7 +97,7 @@ $$
 \end{aligned}
 $$
 
-We introduce the ratio of successive gradient:
+We introduce the ratio of successive gradients:
 $$
 r_i = \frac{u_{i+1} - u_i}{u_{i} - u_{i-1}}
 $$

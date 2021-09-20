@@ -130,4 +130,4 @@ The link between the two is the Lax-Richtmeyer theorem: for a consistent numeric
 
 ### A posteriori analysis
 
-The a posteriori error aims at evaluating the error $\hat{x}_n - x$ as a function of the residual $r_n = F(\hat{x}_n, d)$ by means of constant that are called stability factors.
+The a posteriori error aims at evaluating the error $\hat{x}_n - x$ as a function of the residual $r_n = F(\hat{x}_n, d)$ by means of constants that are called stability factors.

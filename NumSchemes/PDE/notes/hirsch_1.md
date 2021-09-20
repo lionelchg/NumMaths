@@ -35,6 +35,20 @@ $$
     \lim_{\Delta x \to 0, \Delta t \to 0}\max_{n \in \intint{0}{T/\Delta t}, i \in \intint{0}{L_x/\Delta x}} |\tilde{\veps}_i^n| = 0
 $$
 
+## Truncation error
+
+The truncation is obtained from
+
+$$
+N(u_i^n) - D(u_i^n) = \veps_T
+$$
+
+So that the equivalent differential equation is
+
+$$
+D(\bar{u}_i^n) = - \bar{\veps}_T
+$$
+
 ### Von Neumann analysis
 
 #### Fourier decomposition of the solution

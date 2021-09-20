@@ -65,7 +65,7 @@ $$
     (x + y + z)^m = x^m\left(1 + \frac{y}{x} + \frac{z}{x} \right)^m = x^m + mx^{m-1} y + mx^{m-1} z + \mrm{HOT}
 $$
 
-Developing the derivative operator using the formula above:
+Expanding the derivative operator using the formula above:
 
 $$
     \pdv{u}{t} + a \pdv{u}{x} = \sum_{m = 2}^{+\infty} \alpha_m \Delta x^{m-1} \left(\pmdv{u}{x}{m}\right) - \sum_{m=2}^{+\infty} \frac{(-\sig)^{m-1}}{(m-1)!} \sum_{n=2}^{+\infty} \alpha_n \Delta x^{m+n-2} \left(\pmdv{u}{x}{n+m-1}\right)
