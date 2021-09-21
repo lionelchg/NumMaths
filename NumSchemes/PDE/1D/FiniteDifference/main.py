@@ -33,6 +33,9 @@ def run_sims(a: float, cfls: list, xmin: float, xmax: float, nnx: int,
     :param sim_dir: Figures directory
     :type sim_dir: Path
     """
+    # Create directory
+    sim_dir.mkdir(parents=True, exist_ok=True)
+
     # Mesh properties
     Lx, ncx = xmax - xmin, nnx - 1
     x_th = np.linspace(xmin, xmax, 1001)
@@ -54,7 +57,7 @@ def run_sims(a: float, cfls: list, xmin: float, xmax: float, nnx: int,
         dt = dx * cfl / a
         
         # initialization (number of timesteps required to do a full round)
-        u_gauss = np.tile(gaussian(x, x0, 0.3), n_schemes).reshape(n_schemes,  nnx)
+        u_gauss = np.tile(gaussian(x, x0, 0.15), n_schemes).reshape(n_schemes,  nnx)
         u_step = np.tile(step(x, x0), n_schemes).reshape(n_schemes,  nnx)
         u_2pw = np.tile(packet_wave(x, x0, 0.5), n_schemes).reshape(n_schemes,  nnx)
         u_4pw = np.tile(packet_wave(x, x0, 0.25), n_schemes).reshape(n_schemes,  nnx)
@@ -108,6 +111,8 @@ def run_cvg(a: float, cfls: list, xmin: float, xmax: float, nnxs: np.ndarray,
     print('\n-------------------------------------------------------')
     print(f'Studying mesh convergence')
     print('-------------------------------------------------------')
+    # Create directory
+    cvg_dir.mkdir(parents=True, exist_ok=True)
 
     Lx = xmax - xmin
     x0 = (xmin + xmax) / 2
@@ -149,8 +154,6 @@ def main(args):
     sim_dir = fig_dir / 'sim'
 
     # Create the directories
-    cvg_dir.mkdir(parents=True, exist_ok=True)
-    sim_dir.mkdir(parents=True, exist_ok=True)
     
     # Schemes selected
     schemes = args.schemes
@@ -162,9 +165,11 @@ def main(args):
     # Convection speed
     a = 1.0
 
-    # Launch simulations
+    # Launch simulations for different cfls and different resolutions
     cfls = [0.1, 0.3, 0.5, 0.7, 0.9]
-    run_sims(a, cfls, xmin, xmax, 201, 1.0, schemes, sim_dir)
+    nnxs = [51, 201]
+    for nnx in nnxs:
+        run_sims(a, cfls, xmin, xmax, nnx, 1.0, schemes, sim_dir / f'nnx_{nnx:d}')
 
     # Mesh convergence of the schemes
     functions = ['gaussian(x, x0, 0.3)', 'step(x, x0)', 'packet_wave(x, x0, 0.5)']

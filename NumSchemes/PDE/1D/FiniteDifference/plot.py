@@ -11,7 +11,7 @@ def plot_sim(x_th, x, x0, u_gauss, u_step, u_2pw, u_4pw, schemes, figtitle, fign
 
     axes = axes.reshape(-1)
 
-    axes[0].plot(x_th, gaussian(x_th, x0, 0.3))
+    axes[0].plot(x_th, gaussian(x_th, x0, 0.15))
     for i_scheme, scheme in enumerate(schemes):
         axes[0].plot(x, u_gauss[i_scheme, :], '.', ms=4, label=scheme)
     ax_prop_sim(axes[0])
