@@ -63,3 +63,29 @@ Inserting these eigenvectors back in the operator matrix we can find the eigenva
 $$
 S e^{\I i \phi_j} = \Omega(\phi_j) e^{\I i \phi_j}
 $$
+
+### Amplification factor
+
+By assuming $Q = 0$ the exact solution of the semi-discretized scheme is
+
+$$
+\bar{U}(n\Delta t) = \sum_{j=1}^N \bar{U}_{Tj}(n\Delta t) V^{(j)} = \sum_{j=1}^N U_j^0 e^{\Omega_j n \Delta t} V^{(j)}
+$$
+
+The amplitudes of each of the eigenvectors evole in time such that
+
+$$
+\bar{U}_{Tj}(n\Delta t) = e^{\Omega_j \Delta t} \bar{U}_{Tj}((n-1)\Delta t) 
+$$
+
+So that the amplification factor of the semi-discretized scheme can be defined as 
+
+$$
+G(\Omega) = e^{\Omega \Delta t}
+$$
+
+Hence a single mode can be isolated to study the behavior of the scheme in time. This leads to the canonical form of the modal equation
+
+$$
+\dv{w}{t} = \Omega w
+$$

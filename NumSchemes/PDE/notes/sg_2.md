@@ -61,7 +61,7 @@ $$
 where 
 
 $$
-\alpha = \frac{\vb{V}_{ij} \cdot \vb{S}_{ij}^\parallel h_{ij}}{D_{ij}}
+\alpha = \frac{h_{ij} \vb{V}_{ij} \cdot \hat{\vb{ij}}}{D_{ij}}
 $$
 
 ### Flux splitting
