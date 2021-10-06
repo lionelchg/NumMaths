@@ -8,7 +8,7 @@ $$
 F(x, d) = 0
 $$
 
-where $d$ is the set of data which the solution depends on and $F$ is the functional relationship between $x$ and $d$. We restrict the study to direct problems where $F$ and $d$ are given and $x$ is the unkwown. 
+where $d$ is the set of data which the solution depends on and $F$ is the functional relationship between $x$ and $d$. We restrict the study to direct problems where $F$ and $d$ are given and $x$ is the unkwown.
 
 The problem is well-posed if it admits a unique solution which depends continuously on the data. Continuous dependence on the data means that small perturbations of $d$ leads to small perturbations in the solution $x$. For a given $\delta d$, the subsequent change $\delta x$ such that
 
@@ -19,7 +19,7 @@ $$
 satisfies
 
 $$
-\forall \eta > 0 \ \exists K(\eta, d) \ ||\delta d|| < \eta \implies ||\delta x|| < K(\eta, d) ||\delta d||  
+\forall \eta > 0 \ \exists K(\eta, d) \ ||\delta d|| < \eta \implies ||\delta x|| < K(\eta, d) ||\delta d||
 $$
 
 Following that, the relative $K(d)$ and absolute $K_\mrm{abs}(d)$ condition numbers are defined
@@ -31,7 +31,7 @@ K_\mrm{abs}(d) &= \sup_{\delta d \in D} \frac{||\delta x||}{||\delta d||}
 \end{align}
 $$
 
-Introducing the resolvent $G$ for a well-posed problem
+where $D$ is a neighborhood of the origin for which the perturbed system still makes sense. Introducing the resolvent $G$ for a well-posed problem
 
 $$
 x = G(d)
@@ -61,7 +61,7 @@ The expectation is that $x_n \to x$, $d_n \to x$ and $F_n$ approximates $F$ as $
 The numerical method is said to be consistent if
 
 $$
-F_n(x, d) = F_n(x, d) - F(x, d) \to 0 \qquad \text{when } n \to +\infty 
+F_n(x, d) = F_n(x, d) - F(x, d) \to 0 \qquad \text{when } n \to +\infty
 $$
 
 The numerical method is said to be strongly consistent if $F_n(x, d) = 0$ for any value of $n$.
@@ -69,7 +69,7 @@ The numerical method is said to be strongly consistent if $F_n(x, d) = 0$ for an
 We introduce the same definition of well-posedness of a numerical method: for any fixed value of $n$, there exists a unique solution $x_n$ given data $d_n$ that depends continuously on the data
 
 $$
-\forall \eta > 0 \ \exists K_n(\eta, d) \ ||\delta d_n|| < \eta \implies ||\delta x_n|| < K_n(\eta, d_n) ||\delta d_n||  
+\forall \eta > 0 \ \exists K_n(\eta, d) \ ||\delta d_n|| < \eta \implies ||\delta x_n|| < K_n(\eta, d_n) ||\delta d_n||
 $$
 
 Following the same definitions as in the first part
@@ -86,7 +86,7 @@ and then
 $$
 \begin{align}
 K^\mrm{num}(d_n) &= \lim_{k \to +\infty} \sup_{n \geq k} K_n(d_n) \\
-K^\mrm{num}_\mrm{abs}(d_n) &= \lim_{k \to +\infty} \sup_{n \geq k} K_{\mrm{abs}, n}(d_n) 
+K^\mrm{num}_\mrm{abs}(d_n) &= \lim_{k \to +\infty} \sup_{n \geq k} K_{\mrm{abs}, n}(d_n)
 \end{align}
 $$
 

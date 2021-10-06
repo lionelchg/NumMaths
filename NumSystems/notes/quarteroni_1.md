@@ -34,10 +34,10 @@ $$
 X^{-1} A X = J = \mrm{diag}(J_{k_1}(\lambda_1), \ldots, J_{k_l}(\lambda_l))
 $$
 
-which is called canonical Jordan form where $\lambda_j$ are the eigenvalues of $A$ and $J_k(\lambda) \in \mc{M}_k(\mathbb{C})$ with $J_k(\lambda) = 1$ if $k = 1$ and 
+which is called canonical Jordan form where $\lambda_j$ are the eigenvalues of $A$ and $J_k(\lambda) \in \mc{M}_k(\mathbb{C})$ with $J_k(\lambda) = 1$ if $k = 1$ and
 
 $$
-J_k(\lambda) = 
+J_k(\lambda) =
 \begin{bmatrix}
 \lambda & 1 & 0 & \ldots & 0 \\
 0 & \lambda & 1 & \ldots & 0 \\
@@ -56,13 +56,16 @@ Let $A \in \mc{M}_{mn}(\CC)$. There exists two unitary matrices $U \in \mc{M}_m(
 $$
 U^H A V = \Sigma = \mrm{diag}(\sigma_1, \ldots, \sigma_p) \in \mc{M}_{mn}(\CC)
 $$
+
+where $p = \min(m, n)$.
+
 $\Sigma$ is called the Singular Value decomposition of $A$ and $\sigma_1 > \sigma_2 > \ldots > \sigma_p$ are called the singular values of $A$.
 
 ## Matrix Norms
 
 ### Definitions
 
-A matrix norm $||.||$ is said to be compatible or consistent with a vector norm $||.||$ if:
+A matrix norm $||\cdot||$ is said to be compatible or consistent with a vector norm $||\cdot||$ if:
 
 $$
 \begin{equation}
@@ -83,13 +86,13 @@ $$
 $$
 is compatible with the 2-norm.
 
-Let $||.||$ be a vector norm. The induced or natural matrix norm is:
+Let $||\cdot||$ be a vector norm. The induced or natural matrix norm is:
 
 $$
 ||A|| = \sup_{x \neq 0} \frac{||Ax||}{||x||}
 $$
 
-The 1-norm and infinity-norm as easily computable since:
+The 1-norm and infinity-norm are easily computable since:
 
 $$
 \begin{align}
@@ -112,7 +115,7 @@ $$
 
 ### Properties
 
-Let $||.||$ be a consistent matrix norm, then:
+Let $||\cdot||$ be a consistent matrix norm, then:
 
 $$
 \forall A \in \mathbb{C}^{n \times n} \ \rho(A) \leq ||A||
@@ -121,7 +124,7 @@ $$
 More precisely:
 
 $$
-\rho(A) = \inf_{||.||} ||A||
+\rho(A) = \inf_{||\cdot||} ||A||
 $$
 
 A sequence of matrix $A_k$ is said to converge to a matrix $A$ if
@@ -136,8 +139,9 @@ $$
 \lim_k A^k = 0 \iff \rho(A) < 1 \iff \sum_k A^k = (I - A)^{-1}
 $$
 
-Moreover if $\rho(A) < 1$:
+Moreover if $\rho(A) < 1$ and $|| \cdot ||$ is a matrix norm such that $||A|| < 1$ then
 
 $$
 \frac{1}{1 + ||A||} \leq ||(I - A)^{-1}|| \leq \frac{1}{1 - ||A||}
 $$
+

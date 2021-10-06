@@ -30,3 +30,10 @@ def show_eigen(mat):
     print(w)
     print('Eigenvectors:')
     print(v)
+
+def vec_str(vec):
+    """ Print vector in readable format """
+    print_str = ''
+    for scalar in vec:
+        print_str += f'{scalar:10.2e}'
+    return print_str

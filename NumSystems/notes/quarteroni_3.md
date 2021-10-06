@@ -34,7 +34,7 @@ $$
 \mrm{dist}(A) = \min\{||\delta A||/||A||: \det(A + \delta A) = 0\} = 1 / K(A)
 $$
 
-Hence for invertible matrices:
+Hence all invertible matrices $A + \delta A$ satisfy
 
 $$
 ||\delta A|| \: ||A^{-1}|| < 1
@@ -78,7 +78,7 @@ We apply operations to the system $n$ times to get an upper triangular matrix fr
 
 1. $A^{(0)} = A$ and $b^{(0)} = b$
 2. From $k$ to $k+1$:
-We compute the coefficient that will remove 
+We compute the coefficient that will remove
 $$
 m_{ik} = \frac{a_{ik}^{(k)}}{a_{kk}^{(k)}} \quad i \in \intint{k+1}{n}
 $$
@@ -98,7 +98,7 @@ $$
 A = \left(I + \sum_{i=1}^{n-1}m_ie_i^T\right)U
 $$
 
-where 
+where
 
 $$
 m_i = \begin{bmatrix} 0 \\ \vdots \\ m_{i+1, i} \\ \vdots \\ m_{n, i} \end{bmatrix}
