@@ -7,14 +7,20 @@ def print_mat(A, matname):
     for i in range(n):
         row = ''
         for j in range(n):
-            row += f'{A[i, j]:>6.2f} '
+            # Depending on the magnitude of the entry
+            # use scientific notation or not
+            if abs(np.log10(abs(A[i, j]))) < 3 or A[i, j] == 0.0:
+                row += f'{A[i, j]:>6.2f} '
+            else:
+                row += f'{A[i, j]:>6.2e} '
+
         print(row)
 
-def show_matrix(mat):
+def show_matrix(mat, name_mat='A'):
     """ Print matrix and inverse of matrix """
     mat_inv = LA.inv(mat)
-    print_mat(mat, 'A')
-    print_mat(mat_inv, 'A^-1')
+    print_mat(mat, name_mat)
+    print_mat(mat_inv, f'{name_mat}^-1')
 
 def info_matrix(mat):
     """ Print determinant and condition numbers of the matrix """

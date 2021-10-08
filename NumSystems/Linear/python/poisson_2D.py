@@ -7,7 +7,7 @@
 ########################################################################################################################
 import os
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
-from utils import info_matrix
+from utils import info_matrix, show_matrix
 import yaml
 import copy
 
@@ -18,9 +18,10 @@ if __name__ == '__main__':
         cfg_cart = yaml.safe_load(yaml_stream)
     cfg_axi = copy.deepcopy(cfg_cart)
     cfg_axi['geom'] = 'cylindrical'
-    nnxs = [11, 21]
+    nnxs = [5, 11, 21]
     for nnx in nnxs:
-        print(f'nnx = {nnx:d}')
+        print('------------\n'
+                f'nnx = {nnx:d}')
         cfg_cart['nnx'], cfg_cart['nny'] = nnx, nnx
         poisson = PoissonLinSystem(cfg_cart)
 
@@ -32,3 +33,7 @@ if __name__ == '__main__':
 
         print('\nADM K(A):')
         info_matrix(poisson_rx.mat.todense())
+
+        if nnx == 5:
+            show_matrix(poisson.mat.todense(), 'Cart')
+            show_matrix(poisson_rx.mat.todense(), 'Axi')
