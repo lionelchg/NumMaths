@@ -81,3 +81,41 @@ $$
 If $A$ is a strictly diagonally dominant matrix by rows, then the Jacobi and Gauss-Seidel methods are convergent.
 
 If the Jacobi method is convergent then JOR method is convergent for $0 < \omega \leq 1$.
+
+## Stationary and Non-stationary methods
+
+The non-stationary Richardson method is the following
+
+$$
+x^{(k+1)} = x^{(k)} + \alpha_k P^{-1} r^{(k)}
+$$
+
+$\alpha_k = \alpha$ corresponds to the stationary Richardson method. The associated iteration matrix is
+
+$$
+B = I - \alpha_k P^{-1}A
+$$
+
+For computations the following steps are performed
+
+1. Solve $Pz^{(k)} = r^{(k)}$
+2. Compute \alpha_k
+3. Update solution $x^{(k+1)} = x^{(k)} + \alpha_k z^{(k)}$
+4. Update residual $r^{(k+1)} = r^{(k)} - \alpha_k A z^{(k)}$
+
+For any non-singular matrix $P$ the stationary Richardson method is convergent if
+
+$$
+\frac{2 \mrm{Re}\lambda_i}{\alpha |\lambda_i|^2} > 1
+$$
+
+where $\lambda_i$ are the eigenvalues of $P^{-1}A$.
+
+## Preconditioning matrices
+
+To accelerate the convergence procedure, preconditioning can be applied in different forms:
+
+1. Left preconditioning $P^{-1} A x = P^{-1} b$
+2. Right preconditioning $AP^{-1} y = b$ and $y = Px$
+3. Centered preconditioning $P_L^{-1}AP_R^{-1} y = b$ and $y = P_Rx$
+

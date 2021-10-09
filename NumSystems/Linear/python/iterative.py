@@ -47,7 +47,7 @@ def iterations(mat: np.ndarray, rhs: np.ndarray, x0: np.ndarray,
             tol: float, method_dict: dict):
     """ Iterations for a general x^{(k+1)} = B x^{(k)} + f iteration
     as described in Numerical Mathematics chap. 4 """
-    it, maxits = 0, 10
+    it, maxits = 0, 20
     r0 = rhs - mat * x0
     norm_r0 = LA.norm(r0)
     err = norm_r0
@@ -55,7 +55,7 @@ def iterations(mat: np.ndarray, rhs: np.ndarray, x0: np.ndarray,
     x = x0
     while (err > tol and it <= maxits):
         x = np.matmul(B, x) + np.matmul(Pinv, rhs)
-        r = rhs - mat * x
+        r = rhs - np.matmul(mat, x)
         err = LA.norm(r) / norm_r0
         it += 1
         if it % 2 == 0:
