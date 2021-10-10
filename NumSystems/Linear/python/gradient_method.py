@@ -10,7 +10,7 @@ def system_energy(A, b, y):
     return 0.5 * np.dot(y, np.matmul(A, y)) - np.dot(y, b)
 
 def gradient_method(A: np.ndarray, x_0: np.ndarray, b: np.ndarray,
-    P: np.ndarray, maxits: int, tol: float):
+        maxits: int, tol: float):
     """ Implementation of Gradient Method """
     it = 0
     r0 = b - np.matmul(A, x_0)
@@ -25,7 +25,7 @@ def gradient_method(A: np.ndarray, x_0: np.ndarray, b: np.ndarray,
     x_k = x_0
     list_xk.append(x_k)
     r_k = b - np.matmul(A, x_k)
-    while (err > tol and it <= maxits):
+    while (err > tol and it < maxits):
         alpha_k = np.dot(r_k, r_k) / np.dot(r_k, np.matmul(A, r_k))
         x_k = x_k + alpha_k * r_k
         list_xk.append(x_k)
@@ -39,7 +39,7 @@ def gradient_method(A: np.ndarray, x_0: np.ndarray, b: np.ndarray,
     return list_xk
 
 def conjugate_gradient_method(A: np.ndarray, x_0: np.ndarray, b: np.ndarray,
-    P: np.ndarray, maxits: int, tol: float):
+        maxits: int, tol: float):
     """ Implementation of Conjugate-Gradient Method """
     it = 0
     r0 = b - np.matmul(A, x_0)
@@ -55,7 +55,7 @@ def conjugate_gradient_method(A: np.ndarray, x_0: np.ndarray, b: np.ndarray,
     list_xk.append(x_k)
     r_k = b - np.matmul(A, x_k)
     p_k = copy.deepcopy(r_k)
-    while (err > tol and it <= maxits):
+    while (err > tol and it < maxits):
         alpha_k = np.dot(p_k, r_k) / np.dot(p_k, np.matmul(A, p_k))
         x_k = x_k + alpha_k * p_k
         list_xk.append(x_k)
@@ -85,20 +85,24 @@ if __name__ == '__main__':
     # Linear system parameters
     lambda_1 = 2.0
     lambda_2 = 1.0
+
+    # Transition matrix
+    trans_mat = np.array([[1, 0], [-1, 1]])
     A = np.array([[lambda_1, 0],
                 [0, lambda_2]])
+    # A = np.matmul(np.matmul(trans_mat, A), LA.inv(trans_mat))
     x_sol = np.ones(2)
     b = np.matmul(A, x_sol)
 
     # Gradient method
     x_0 = np.array([4, 3.5])
-    list_xk_gm = gradient_method(A, x_0, b, np.eye(2), 5, 1e-4)
+    list_xk_gm = gradient_method(A, x_0, b, 5, 1e-4)
     iterate_xks_gm = np.array(list_xk_gm)
     list_energiesk_gm = [system_energy(A, b, xk) for xk in list_xk_gm]
 
     # Conjugate gradient method
     x_0 = np.array([4, 3.5])
-    list_xk_cg = conjugate_gradient_method(A, x_0, b, np.eye(2), 5, 1e-4)
+    list_xk_cg = conjugate_gradient_method(A, x_0, b, 5, 1e-4)
     iterate_xks_cg = np.array(list_xk_cg)
     list_energiesk_cg = [system_energy(A, b, xk) for xk in list_xk_cg]
 

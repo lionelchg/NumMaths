@@ -119,3 +119,28 @@ To accelerate the convergence procedure, preconditioning can be applied in diffe
 2. Right preconditioning $AP^{-1} y = b$ and $y = Px$
 3. Centered preconditioning $P_L^{-1}AP_R^{-1} y = b$ and $y = P_Rx$
 
+## The Gradient method
+
+For a positive definite matrix $A$ we define the energy of the linear system
+
+$$
+E(y) = \frac{1}{2} y^T A y - y^Tb
+$$
+
+The gradient is $\nabla E = Ay - b$ so that for the solution of the system $x$ we have $\nabla E = 0$ and from Taylor expansion in multiple dimensions
+
+$$
+E(y) = E(x + (y-x)) = E(x) + \frac{1}{2} ||y - x||_A^2
+$$
+
+We use a Richardson method and choose the direction of update as the direction of steepest gradient descent
+
+$$
+x^{(k+1)} = x^{(k)} + \alpha_k r^{(k)}
+$$
+
+The optimal parameter is
+
+$$
+\alpha_k = \frac{r^{(k)T}r^{(k)}}{r^{(k)T}Ar^{(k)}}
+$$

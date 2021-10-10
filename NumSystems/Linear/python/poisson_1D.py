@@ -1,6 +1,7 @@
 import numpy as np
 from utils import show_matrix, info_matrix, show_eigen
 from iterative import rho_method, spectal_radius
+from gradient_method import conjugate_gradient_method
 
 def poisson_dirichlet_1D(n: int):
     """ Create the array of poisson dirichlet 1D problem """
@@ -45,9 +46,33 @@ if __name__ == '__main__':
 
     # Print info on matrices
     print('Matrices for n = 11')
-    show_matrix(poisson_dirichlet_1D(11), 'Dirichlet')
-    show_matrix(poisson_dirichlet_1D_sym(11), 'DirichletSym')
-    show_matrix(poisson_1D_axi(11), 'Axi')
+    n = 11
+    mat_dir = poisson_dirichlet_1D(n)
+    mat_dir_sym = poisson_dirichlet_1D_sym(n)
+    mat_axi = poisson_1D_axi(n)
+
+    # Solve ficitous system
+    x_sol = np.ones(n)
+    print('Dirichlet Symmetric')
+    b = np.matmul(mat_dir_sym, x_sol)
+    x_0 = np.linspace(1, 11, 11)
+    conjugate_gradient_method(mat_dir_sym, x_0, b, 20, 1e-3)
+
+    print('Dirichlet Non-Symmetric')
+    b = np.matmul(mat_dir, x_sol)
+    x_0 = np.linspace(1, 11, 11)
+    conjugate_gradient_method(mat_dir, x_0, b, 20, 1e-3)
+
+    print('Axi matrix')
+    b = np.matmul(mat_axi, x_sol)
+    x_0 = np.linspace(1, 11, 11)
+    conjugate_gradient_method(mat_axi, x_0, b, 20, 1e-3)
+
+    show_matrix(mat_dir, 'Dirichlet')
+    show_matrix(mat_dir_sym, 'DirichletSym')
+    show_matrix(mat_axi, 'Axi')
+
+    # Print info about matrices for different sizes
     for n in [11, 21, 51, 101]:
         print('-------------')
         print(f'n = {n:d}')
