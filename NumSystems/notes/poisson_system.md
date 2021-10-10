@@ -42,7 +42,19 @@ A =
 \end{bmatrix}
 $$
 
-and the removed values will be added to $b$ in this modified version.
+and the removed values will be added to $b$ in this modified version. Let us take the matrix of size $N$ which represents the inner part of the Dirichlet matrices:
+
+$$
+A =
+\begin{bmatrix}
+-2 & 1 &  &  \\
+1 & \ddots & \ddots & \\
+ & \ddots & \ddots & 1 \\
+ &  & 1 & -2 \\
+\end{bmatrix}
+$$
+
+This matrix has eigenvalues $\lambda_k = 2(1 - \cos(k\pi / (N+1)))$ and eigenvectors $(v_k)_i = \sin(ik\pi / (N+1))$
 
 For Neumann at $x_0$ and Dirichlet at $x_N$ two versions are possible depending on the discretization of the Neumann condition. A ghost-cell approach yields
 

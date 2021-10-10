@@ -99,7 +99,7 @@ $$
 For computations the following steps are performed
 
 1. Solve $Pz^{(k)} = r^{(k)}$
-2. Compute \alpha_k
+2. Compute $\alpha_k$
 3. Update solution $x^{(k+1)} = x^{(k)} + \alpha_k z^{(k)}$
 4. Update residual $r^{(k+1)} = r^{(k)} - \alpha_k A z^{(k)}$
 

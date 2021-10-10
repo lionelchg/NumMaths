@@ -48,7 +48,7 @@ def iterations(mat: np.ndarray, rhs: np.ndarray, x0: np.ndarray,
     """ Iterations for a general x^{(k+1)} = B x^{(k)} + f iteration
     as described in Numerical Mathematics chap. 4 """
     it, maxits = 0, 20
-    r0 = rhs - mat * x0
+    r0 = rhs - np.matmul(mat, x0)
     norm_r0 = LA.norm(r0)
     err = norm_r0
     B, Pinv = getattr(current_mod, method_dict['name'])(mat, **method_dict['args'])
@@ -58,8 +58,9 @@ def iterations(mat: np.ndarray, rhs: np.ndarray, x0: np.ndarray,
         r = rhs - np.matmul(mat, x)
         err = LA.norm(r) / norm_r0
         it += 1
-        if it % 2 == 0:
+        if it % 5 == 0:
             print(f'Iteration {it:3d} - x = [{vec_str(x)}] - err = {err:.2e}')
+    print(f'Last iteration {it:3d} - x = [{vec_str(x)}] - err = {err:.2e}')
 
 def spectal_radius(mat):
     """ Return the spectral radius of matrix mat """
