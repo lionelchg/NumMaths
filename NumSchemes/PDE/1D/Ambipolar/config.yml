@@ -1,0 +1,29 @@
+
+grid:
+  npts: 1001
+  x_min: -2.0e-3
+  x_max: 2.0e-3
+
+mixture:
+  spec_names: ["Electron", "A+", 'A-']
+
+gas:
+  T: 300.0
+  P: 1.01325e+5
+
+init:
+  Electron:
+    A0: 1.0e+10
+    A: 1.0e+20
+    x0: 0.0e+0
+    sigma: 1.5e-4
+  A+:
+    A0: 1.1e+10
+    A: 1.1e+20
+    x0: 0.0e+0
+    sigma: 1.5e-4
+  A-:
+    A0: 0.1e+10
+    A: 0.1e+20
+    x0: 0.0e+0
+    sigma: 1.5e-4
