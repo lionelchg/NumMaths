@@ -29,13 +29,15 @@ def info_matrix(mat):
     for norm in [1, 2, np.inf]:
         print(f'K_{norm:.0f} = {LA.cond(mat, norm):.2e}')
 
-def show_eigen(mat):
+def compute_eigen(mat, lprint=True):
     """ Print eigenvalues and eigenvectors of a given matrix """
-    w, v = LA.eig(mat)
-    print('Eigenvalues:')
-    print(w)
-    print('Eigenvectors:')
-    print(v)
+    eigenvalues, eigenvectors = LA.eig(mat)
+    if lprint:
+        print('Eigenvalues:')
+        print(eigenvalues)
+        print('Eigenvectors:')
+        print(eigenvectors)
+    return eigenvalues, eigenvectors
 
 def vec_str(vec):
     """ Print vector in readable format """

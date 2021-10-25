@@ -1,5 +1,5 @@
 import numpy as np
-from utils import show_matrix, info_matrix, show_eigen
+from utils import show_matrix, info_matrix
 from iterative import rho_method, spectal_radius
 from gradient_method import conjugate_gradient_method
 
@@ -37,6 +37,17 @@ def poisson_1D_axi(n: int):
         mat[i, i - 1] = (i - 0.5) / i
         mat[i, i] = -2
         mat[i, i + 1] = (i + 0.5) / i
+    return mat
+
+def poisson_inner_1D(n: int):
+    """ Create the array of inner symmetric Poisson matrix in 1D """
+    mat = np.zeros((n, n))
+    mat[0, 0], mat[0, 1] = -2, 1
+    mat[-1, -1], mat[-1, -2] = -2, 1
+    for i in range(1, n - 1):
+        mat[i, i - 1] = 1
+        mat[i, i] = -2
+        mat[i, i + 1] = 1
     return mat
 
 if __name__ == '__main__':
