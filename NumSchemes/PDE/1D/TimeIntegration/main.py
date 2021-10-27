@@ -30,4 +30,4 @@ if __name__ == '__main__':
         X, Y = np.meshgrid(lambda_dt_re, lambda_dt_im)
         ax_plot_rk_stab(ax, X, Y)
         ax.legend()
-        fig.savefig(fig_dir / f'{scheme}_order_rks', bbox_inches='tight')
+        fig.savefig(fig_dir / f'{scheme}_order_rks', bbox_inches='tight', dpi=200)

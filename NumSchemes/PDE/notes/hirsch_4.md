@@ -21,7 +21,7 @@ $$
 Taylor expansion of the right hand side yields
 
 $$
-u_i + \alpha_i (\Delta x_{i+1} (u_x)_i + \frac{\Delta x_{i+1}^2}{2}(u_{xx})_i) + \beta_i (\Delta x_i (u_x)_i - \frac{\Delta x_i^2}{2}(u_{xx})_i) 
+u_i + \alpha_i (\Delta x_{i+1} (u_x)_i + \frac{\Delta x_{i+1}^2}{2}(u_{xx})_i) + \beta_i (\Delta x_i (u_x)_i - \frac{\Delta x_i^2}{2}(u_{xx})_i)
 $$
 
 Two conditions for third order accuracy are
@@ -53,7 +53,7 @@ $$
 \frac{\mrm{d}u_i}{\mrm{d}t} = -\frac{1}{\Delta x_i}(f^*_{i+1/2} - f^*_{i-1/2})
 $$
 
-where the numerical flux at cell $i + 1/2$ depends on the surrounding points 
+where the numerical flux at cell $i + 1/2$ depends on the surrounding points
 
 $$
 f^*_{i+1/2}((u_k)_{k \in V(i)}).
@@ -75,14 +75,14 @@ $$
 
 The following table summarizes the remarkable values of this scheme
 
-| Name | $\epsilon$ | $\kappa$ |
-| ---- | ---------- | ------- |
-| FOU | 0 | - |
-| Second order upwind | 1 | -1 |
-| Central | 1 | 1 |
-| Fromm | 1 | 0 |
-| Quick scheme | 1 | 1/2 |
-| Third order accurate | 1 | 1/3 |
+| Name                 | $\epsilon$ | $\kappa$ |
+| -------------------- | ---------- | -------- |
+| FOU                  | 0          | -        |
+| Second order upwind  | 1          | -1       |
+| Central              | 1          | 1        |
+| Fromm                | 1          | 0        |
+| Quick scheme         | 1          | 1/2      |
+| Third order accurate | 1          | 1/3      |
 
 Application of limiter on top of the $\kappa$-scheme is straightforward:
 
