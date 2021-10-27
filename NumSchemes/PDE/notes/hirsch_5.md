@@ -52,7 +52,7 @@ and if an eigenvalue is zero, it has to be a simple eigenvalue.
 
 ### Matrix method and Fourier modes
 
-To be able to analyze a scheme associted to specific boundary conditions the matrix $S$ needs to be diagonalized. It is a complicated task, either tedious to do by hand or very costly numerically, so that periodic boundary conditions can be simplified so that the eigenvectors are the Fourier modes
+To be able to analyze a scheme associted to specific boundary conditions the matrix $S$ needs to be diagonalized. It is a complicated task, either tedious to do by hand or very costly numerically, so that periodic boundary conditions can be assumed so that the eigenvectors are the Fourier modes
 
 $$
 V^{(j)}(x) = e^{\I k_j x}
@@ -75,10 +75,10 @@ $$
 The amplitudes of each of the eigenvectors evole in time such that
 
 $$
-\bar{U}_{Tj}(n\Delta t) = e^{\Omega_j \Delta t} \bar{U}_{Tj}((n-1)\Delta t) 
+\bar{U}_{Tj}(n\Delta t) = e^{\Omega_j \Delta t} \bar{U}_{Tj}((n-1)\Delta t)
 $$
 
-So that the amplification factor of the semi-discretized scheme can be defined as 
+So that the amplification factor of the semi-discretized scheme can be defined as
 
 $$
 G(\Omega) = e^{\Omega \Delta t}
