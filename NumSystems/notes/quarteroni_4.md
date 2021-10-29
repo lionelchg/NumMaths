@@ -59,7 +59,7 @@ $$
 The Gauss-Seidel method uses triangular parts of the initial matrix for iterations such that $P = D - E$ and $N = F$. Component wise the iteration is expanded as
 
 $$
-x_i^{(k+1)} = \frac{1}{a_{ii}} [b_i - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k)}]
+x_i^{(k+1)} = \frac{1}{a_{ii}} [b_i - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j = i+1}^{n} a_{ij} x_j^{(k)}]
 $$
 
 The iteration matrix is $B = (D - E)^{-1} F$
@@ -67,7 +67,7 @@ The iteration matrix is $B = (D - E)^{-1} F$
 Same as for the Jacobi method a relaxation parameter $\omega$ can be added to yield the successive over-relaxation method (SOR)
 
 $$
-x_i^{(k+1)} = \frac{\omega}{a_{ii}} [b_i - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k)}] + (1 - \omega) x_i^{(k)}
+x_i^{(k+1)} = \frac{\omega}{a_{ii}} [b_i - \sum_{j = 1}^{i-1} a_{ij} x_j^{(k+1)} - \sum_{j = i+1}^{n} a_{ij} x_j^{(k)}] + (1 - \omega) x_i^{(k)}
 $$
 
 for which the iteration matrix is

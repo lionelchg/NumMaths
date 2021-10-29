@@ -1,6 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pathlib import Path
+
+from cycler import cycler
+
+default_cycler = (cycler(color=['darkblue', 'mediumblue', 'royalblue']) +
+                  cycler(linestyle=['-', '--', ':']))
+
+plt.rc('lines', linewidth=1.8)
+plt.rc('axes', prop_cycle=default_cycler)
 
 def van_leer(r):
     return (r + np.abs(r)) / (1 + r)
@@ -26,7 +35,7 @@ def osher(r):
 def alpha_lim(r, alpha):
     zeros = np.zeros_like(r)
     ones = np.ones_like(r)
-    return np.maximum(zeros, 
+    return np.maximum(zeros,
         np.minimum.reduce([2 * r, alpha * r + (1 - alpha), 2 * ones]))
 
 def ax_prop(ax, title):
@@ -36,9 +45,11 @@ def ax_prop(ax, title):
     ax.set_ylim([0, 2.5])
 
 if __name__ == '__main__':
-    fig_dir = 'figures/'
+    fig_dir = Path('figures/limiters')
+    fig_dir.mkdir(parents=True, exist_ok=True)
+
     r = np.linspace(0, 3, 301)
-    fig, axes = plt.subplots(nrows=3, ncols=2, 
+    fig, axes = plt.subplots(nrows=3, ncols=2,
         figsize=(10, 10), sharex=True, sharey=True)
     axes = axes.reshape(-1)
     axes[0].plot(r, van_leer(r))
@@ -59,4 +70,14 @@ if __name__ == '__main__':
     stab_curve_down = np.where(r <= 1, r, 1)
     for ax in axes:
         ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
-    fig.savefig(f'{fig_dir}limiters', bbox_inches='tight')
+    fig.savefig(fig_dir / 'limiters', bbox_inches='tight')
+
+    # Specific plot for sweby limiter
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.plot(r, beta_lim(r, 1.0), label=r'$\beta = 1$ (Min-mod)')
+    ax.plot(r, beta_lim(r, 1.5), label=r'$\beta = 1.5$')
+    ax.plot(r, beta_lim(r, 2.0), label=r'$\beta = 2$ (Superbee)')
+    ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
+    ax_prop(ax, r'Sweby $\beta$-limiter')
+    ax.legend()
+    fig.savefig(fig_dir / 'sweby_limiters', bbox_inches='tight')
