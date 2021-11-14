@@ -17,7 +17,7 @@ $$
 Stability is the requirement that all errors must remain bounded when the iteration process advances. Denoting by $u_i^n$ the computed solution and $\bar{u}_i^n$ the exact solution of the numerical scheme, we define the error as $\bar{\veps}_i^n = u_i^n - \bar{u}_i^n$ and require:
 
 $$
-    \lim_{n\to +\infty} |\bar{\veps}_i^n| \leq K 
+    \lim_{n\to +\infty} |\bar{\veps}_i^n| \leq K
 $$
 at fixed $\Delta t$ with $K$ independent of $n$.
 
@@ -86,7 +86,7 @@ $$
 and require that
 
 $$
-    |G(\phi_j)| \leq 1 \qquad \forall j \in \intint{-N}{N} 
+    |G(\phi_j)| \leq 1 \qquad \forall j \in \intint{-N}{N}
 $$
 
 In practice for a numerical scheme we set:
@@ -122,7 +122,7 @@ We can then identify the exact and numerical amplification factors:
 $$
 \begin{aligned}
     \tilde{G} &= e^{-\I \tilde{\omega} \Delta  t} = |\tilde{{G}}| e^{-\I\tilde{\Phi}} \\
-    G &= e^{-\I \omega \Delta  t} = |G| e^{-\I\Phi} 
+    G &= e^{-\I \omega \Delta  t} = |G| e^{-\I\Phi}
 \end{aligned}
 $$
 
@@ -142,7 +142,6 @@ Let us consider the linear convection equation:
 $$
     \pdv{u}{t} + a \pdv{u}{x} = 0 \implies \tilde{G} = e^{-\I a k \Delta t} \implies \veps_D = |G|, \veps_\phi = \frac{\Phi}{a k \Delta t} = \frac{a_\mrm{num}}{a}
 $$
-
 
 
 For the diffusion problem:

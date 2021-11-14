@@ -43,6 +43,8 @@ def ax_prop(ax, title):
     ax.set_title(title)
     ax.set_xlim([0, 3])
     ax.set_ylim([0, 2.5])
+    ax.set_xlabel('$r$')
+    ax.set_ylabel('$\Psi(r)$')
 
 if __name__ == '__main__':
     fig_dir = Path('figures/limiters')
@@ -71,6 +73,7 @@ if __name__ == '__main__':
     for ax in axes:
         ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
     fig.savefig(fig_dir / 'limiters', bbox_inches='tight')
+    plt.close(fig)
 
     # Specific plot for sweby limiter
     fig, ax = plt.subplots(figsize=(6, 4))
@@ -78,6 +81,15 @@ if __name__ == '__main__':
     ax.plot(r, beta_lim(r, 1.5), label=r'$\beta = 1.5$')
     ax.plot(r, beta_lim(r, 2.0), label=r'$\beta = 2$ (Superbee)')
     ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
-    ax_prop(ax, r'Sweby $\beta$-limiter')
+    ax_prop(ax, '')
     ax.legend()
-    fig.savefig(fig_dir / 'sweby_limiters', bbox_inches='tight')
+    fig.savefig(fig_dir / 'sweby_limiters.pdf', format='pdf', bbox_inches='tight')
+    plt.close(fig)
+
+    # Specific plot for vanleer limiter
+    fig, ax = plt.subplots(figsize=(6, 4))
+    ax.plot(r, van_leer(r))
+    ax.fill_between(r, stab_curve_down, stab_curve_up, alpha=0.3)
+    ax_prop(ax, '')
+    fig.savefig(fig_dir / 'vanleer_limiter.pdf', format='pdf', bbox_inches='tight')
+    plt.close(fig)
