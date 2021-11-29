@@ -9,9 +9,14 @@ integer(c_long), parameter :: neq = 3
 ! real(8), parameter :: a  = 1.2d0
 ! real(8), parameter :: b  = 2.5d0
 ! real(8), parameter :: ep = 1.0d-5
-real(8) :: a = 1.2d0
-real(8) :: b = 2.5d0
-real(8) :: ep = 1.0d-5
+! real(8) :: a = 1.2d0
+! real(8) :: b = 2.5d0
+! real(8) :: ep = 1.0d-5
+
+real(8), pointer :: a_ptr
+real(8), pointer :: b_ptr
+real(8), pointer :: ep_ptr
+
 
 contains
 
@@ -38,9 +43,9 @@ integer(c_int) function RhsFn(t, sunvec_y, sunvec_f, user_data) &
     write (*, '(3(A, ES12.5))') "a = ", a, " b = ", b, " ep = ", ep
 
     ! Fill RHS vector
-    fvec(1) = a  -  (yvec(3) + 1.0d0) * yvec(1)  +  yvec(2) * yvec(1) * yvec(1)
+    fvec(1) = a_ptr  -  (yvec(3) + 1.0d0) * yvec(1)  +  yvec(2) * yvec(1) * yvec(1)
     fvec(2) = yvec(3) * yvec(1)  -  yvec(2) * yvec(1) * yvec(1)
-    fvec(3) = (b-yvec(3))/ep - yvec(3) * yvec(1)
+    fvec(3) = (b_ptr-yvec(3))/ep_ptr - yvec(3) * yvec(1)
 
     ! Return success
     ierr = 0
@@ -389,7 +394,8 @@ end module mod_implicit_solver
 
 program main
     use mod_implicit_solver, only: init, solve, destroy
-    use mod_ode_analytic, only: neq, RhsFn, a, b, ep
+    ! use mod_ode_analytic, only: neq, RhsFn, a, b, ep
+    use mod_ode_analytic, only: neq, RhsFn, a_ptr, b_ptr, ep_ptr
 
     real(8) :: tstart, tend, rtol, atol, dtout, tout
     real(8) :: tcur(1)
@@ -417,6 +423,10 @@ program main
     b = 2.5d0
     ep = 1.0d-5
 
+    a_ptr => a
+    b_ptr => b
+    ep_ptr => ep
+
     print *, "init"
     ! call solver%init(neq, rtol, atol)
     call init(neq, rtol, atol)
@@ -434,7 +444,7 @@ program main
         tout = min(tout + dtout, tend)
         ! tout = tend
         ! call solver%solve(y, tout, tcur)
-        call solve(y, tout, tcur)
+        call solve(y(1), tout, tcur)
         a = a + 1.0d-2
         b = b + 1.0d-2
         ep = ep + 1.0d-7
