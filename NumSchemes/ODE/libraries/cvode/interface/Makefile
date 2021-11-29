@@ -26,7 +26,7 @@ includedir = ${prefix}/fortran
 libdir     = ${prefix}/lib64
 
 F90      = /softs/intel/compilers_and_libraries_2018.1.163/linux/bin/intel64/ifort
-F90FLAGS = -O3
+F90FLAGS = -O3 -g 
 F90LIBS  =  -lm /usr/lib64/librt.so
 
 # ------------------------------------------------------------------------------
@@ -44,7 +44,7 @@ LINKFLAGS_KLU = ${LINKFLAGS}:
 
 # ------------------------------------------------------------------------------
 
-EXAMPLES =  fcv_analytical_dns fcv_brusselator_dns_f2003 tests
+EXAMPLES = mod_implicit_solver 
 EXAMPLES_DEPENDENCIES =
 
 OBJECTS = ${EXAMPLES:=.o}

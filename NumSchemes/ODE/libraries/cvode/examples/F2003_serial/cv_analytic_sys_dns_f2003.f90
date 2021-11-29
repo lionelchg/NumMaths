@@ -95,7 +95,9 @@ contains
     !======= Internals ============
 
     ! get data arrays from SUNDIALS vectors
+    print *, "FN_VGetVectorID(sunvec_y)", FN_VGetVectorID(sunvec_y)
     yvec => FN_VGetArrayPointer(sunvec_y)
+    print *, "FN_VGetVectorID(sunvec_f)", FN_VGetVectorID(sunvec_f)
     fvec => FN_VGetArrayPointer(sunvec_f)
 
     ! fill A matrix (column major ordering)
