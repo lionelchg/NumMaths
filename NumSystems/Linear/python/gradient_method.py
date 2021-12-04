@@ -107,7 +107,7 @@ if __name__ == '__main__':
     list_energiesk_cg = [system_energy(A, b, xk) for xk in list_xk_cg]
 
     # Compute the system energies over a grid
-    ny1, ny2 = 101, 101
+    ny1, ny2 = 401, 401
     y1, y2 = np.linspace(-1, 5, ny1), np.linspace(-1, 5, ny2)
     Y1, Y2 = np.meshgrid(y1, y2)
     Phi = np.zeros_like(Y1)
@@ -121,13 +121,20 @@ if __name__ == '__main__':
     # GM plotting
     cs = axes[0].contour(Y1, Y2, Phi, levels=list_energiesk_gm[::-1], colors='k')
     axes[0].clabel(cs, fontsize=9, inline=True)
-    axes[0].plot(iterate_xks_gm[:, 0], iterate_xks_gm[:, 1], color='firebrick')
+    axes[0].plot(iterate_xks_gm[:, 0], iterate_xks_gm[:, 1], color='firebrick', linestyle='--')
+    axes[0].plot(iterate_xks_cg[:, 0], iterate_xks_cg[:, 1], color='mediumblue')
     ax_prop(axes[0])
 
     # CG plotting
-    cs = axes[1].contour(Y1, Y2, Phi, levels=list_energiesk_cg[::-1], colors='k')
+    cs = axes[1].contour(Y1, Y2, Phi, levels=list_energiesk_gm[::-1], colors='k')
     axes[1].clabel(cs, fontsize=9, inline=True)
-    axes[1].plot(iterate_xks_cg[:, 0], iterate_xks_cg[:, 1], color='firebrick')
+    axes[1].plot(iterate_xks_gm[:, 0], iterate_xks_gm[:, 1], color='firebrick', linestyle='--', label='GM')
+    axes[1].plot(iterate_xks_cg[:, 0], iterate_xks_cg[:, 1], color='mediumblue', label='CG')
+    axes[1].set_xlim([0.5, 1.5])
+    axes[1].set_ylim([0.5, 1.5])
+    axes[1].legend()
     ax_prop(axes[1])
     fig.savefig(fig_dir / 'system_energy', bbox_inches='tight')
+    fig.savefig(fig_dir / 'system_energy.pdf', format='pdf', bbox_inches='tight')
+    plt.close(fig)
 
