@@ -10,3 +10,7 @@ __pycache__
 # executables and object files
 *.o
 *.x
+*.mod
+*.out
+mod_implicit_solver
+implicit_solver

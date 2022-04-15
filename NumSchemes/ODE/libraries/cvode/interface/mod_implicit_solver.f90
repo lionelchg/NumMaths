@@ -40,7 +40,7 @@ integer(c_int) function RhsFn(t, sunvec_y, sunvec_f, user_data) &
     yvec => FN_VGetArrayPointer(sunvec_y)
     fvec => FN_VGetArrayPointer(sunvec_f)
 
-    write (*, '(3(A, ES12.5))') "a = ", a, " b = ", b, " ep = ", ep
+    ! write (*, '(3(A, ES12.5))') "a = ", a_ptr, " b = ", b_ptr, " ep = ", ep_ptr
 
     ! Fill RHS vector
     fvec(1) = a_ptr  -  (yvec(3) + 1.0d0) * yvec(1)  +  yvec(2) * yvec(1) * yvec(1)
@@ -75,7 +75,7 @@ integer(c_int) function JacFn(t, sunvec_y, sunvec_f, sunmat_J, user_data, tmp1, 
     Jmat = [-(yvec(3)+1.0d0) + 2.0d0*yvec(1)*yvec(2),  &
             yvec(3) - 2.0d0*yvec(1)*yvec(2), -yvec(3), &
             yvec(1)*yvec(1), -yvec(1)*yvec(1), 0.0d0,  &
-            -yvec(1), yvec(1), -1.0d0/ep - yvec(1)]
+            -yvec(1), yvec(1), -1.0d0/ep_ptr - yvec(1)]
 
     ierr = 0
     return
@@ -396,11 +396,13 @@ program main
     use mod_implicit_solver, only: init, solve, destroy
     ! use mod_ode_analytic, only: neq, RhsFn, a, b, ep
     use mod_ode_analytic, only: neq, RhsFn, a_ptr, b_ptr, ep_ptr
+    implicit none
 
     real(8) :: tstart, tend, rtol, atol, dtout, tout
     real(8) :: tcur(1)
     integer :: ierr, nout, outstep
     real(8), dimension(:), allocatable :: y
+    real(8), target :: a, b, ep
 
     ! type(implicit_solver_t) :: solver
 
