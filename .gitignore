@@ -14,3 +14,6 @@ __pycache__
 *.out
 mod_implicit_solver
 implicit_solver
+avbp_vect
+brusselator_vect
+NumSchemes/ODE/libraries/cvode/vectorization/out

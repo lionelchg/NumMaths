@@ -21,24 +21,24 @@
 
 SHELL = sh
 
-prefix     = /Users/bogopolsky/THESE/NUMERICS/sundials/instdir
+prefix     = /scratch/cfd/bogopolsky/sundials/sundials# /Users/bogopolsky/THESE/NUMERICS/sundials/instdir
 includedir = ${prefix}/fortran
-libdir     = ${prefix}/lib
+libdir     = ${prefix}/lib64
 
-F90      = mpif90
-F90FLAGS = -O3 -g -march=native
-F90LIBS  =  # -lm /usr/lib64/librt.so
+F90      = mpiifort
+F90FLAGS = -O3 -g -traceback -align -march=core-avx2 -fma -axCORE-AVX2 #-debug all -check all -fp-stack-check -heap-arrays -ftrapuv -check pointers -check bounds#-qopt-report=2
+F90LIBS  =  #-lm /usr/lib64/librt.so
 
 # ------------------------------------------------------------------------------
 
 INCLUDES  = -I${includedir}
 LIBRARIES = -lsundials_fcvode_mod -lsundials_cvode ${F90LIBS}
-LINKFLAGS = -Wl,-rpath,${prefix}/lib
+LINKFLAGS = -L${libdir} -Wl,-rpath,${libdir}
 
 # ------------------------------------------------------------------------------
 
-EXAMPLES = implicit_solver
-EXAMPLES_DEPENDENCIES =
+EXAMPLES = avbp_vect brusselator_vect
+EXAMPLES_DEPENDENCIES = mod_prec mod_ode_analytic_boeuf mod_ode_analytic_brusselator mod_implicit_solver
 
 OBJECTS = ${EXAMPLES:=.o}
 OBJECTS_DEPENDENCIES = ${EXAMPLES_DEPENDENCIES:=.o}
